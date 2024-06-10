@@ -1,0 +1,40 @@
+pipeline {
+    agent any 
+
+    stages {
+        stage('clear existing image and container') {
+            steps {
+                script {
+                    sh "echo deleting existing image and container"
+                    try {
+                        sh "docker kill middleware-service"
+                        sh "docker rm middleware-service"
+                        sh "docker rmi middleware-service"
+
+
+                    } catch (Exception e) {
+                        echo "No existing image or container to remove"
+                    }
+                }
+            }   
+        }
+        stage('build image') {
+            steps {
+                script {
+                    sh "docker build -t middleware-service ."
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                script {
+                    sh "docker run -d --name middleware-service -p 9014:3000 --restart unless-stopped middleware-service"
+                }
+            }
+        }
+    }
+}  
+
+def dockerExec(command) {
+    sh "docker exec ${CONTAINER_NAME} ${command}"
+}
