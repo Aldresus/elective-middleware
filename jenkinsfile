@@ -1,6 +1,10 @@
 pipeline {
     agent any 
 
+    environment {
+        DISCORD_WEBHOOK_URL = credentials('DISCORD_WEBHOOK_URL')
+    }
+
     stages {
         stage('clear existing image and container') {
             steps {
@@ -16,7 +20,12 @@ pipeline {
                         echo "No existing image or container to remove"
                     }
                 }
-            }   
+            }
+            post {
+                failure {
+                    discordSend description: "Failed to clear existing image and container.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+            }
         }
         stage('build image') {
             steps {
@@ -24,11 +33,24 @@ pipeline {
                     sh "docker build -t middleware-service ."
                 }
             }
+            post {
+                failure {
+                    discordSend description: "Failed to build image.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+            }
         }
         stage('deploy') {
             steps {
                 script {
                     sh "docker run -d --name middleware-service -p 9014:3000 --restart unless-stopped middleware-service"
+                }
+            }
+            post {
+                success {
+                    discordSend description: "Deployed image successfully.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                }
+                failure {
+                    discordSend description: "Failed to deploy image.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
             }
         }
