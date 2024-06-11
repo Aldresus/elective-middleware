@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { CreateRestaurantDto } from './dto/create-restaurant.dto';
-import type { UpdateRestaurantDto } from './dto/update-restaurant.dto';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { AxiosResponse } from 'axios';
 import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
