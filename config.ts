@@ -4,4 +4,7 @@ export const config = {
   baseUrl_product_api: 'http://restaurant.lihoco.fr/api/product',
   baseUrl_users_restaurants_api:
     'http://restaurants.lihoco.fr/api/users_restaurant',
+  baseUrl_deliver_api: 'http://delivery.lihoco.fr/api/deliver',
+  baseUrl_order_api: 'http://order.lihoco.fr/api/order',
+  baseUrl_user_api: 'http://user.lihoco.fr/api/user',
 };
