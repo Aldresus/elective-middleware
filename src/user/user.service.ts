@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { AxiosResponse } from 'axios';
@@ -18,16 +18,31 @@ export class UserService {
   constructor(private readonly httpService: HttpService) {}
 
   async login(email: string, password: string): Promise<any> {
-    const response = await lastValueFrom(
-      this.httpService.post<AxiosResponse<UserEntity>>(
-        `${this.baseUrl}/login`,
-        {
-          email,
-          password,
-        },
-      ),
-    );
-    return response.data;
+    try {
+      const response = await lastValueFrom(
+        this.httpService.post<AxiosResponse<UserEntity>>(
+          `${this.baseUrl}/login`,
+          { email, password },
+        ),
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        // AxiosError contient une réponse
+        const { status, data } = error.response;
+        console.error('AxiosError:', status, data);
+
+        // Transférez l'erreur en utilisant une exception NestJS appropriée
+        throw new HttpException(data, status);
+      } else {
+        // Autres erreurs (réseau, etc.)
+        console.error('Error:', error.message);
+        throw new HttpException(
+          'An error occurred while processing your request',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
   async register(createUserDto: CreateUserDto): Promise<any> {
