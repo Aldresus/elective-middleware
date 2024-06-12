@@ -11,6 +11,7 @@ pipeline {
                 script {
                     sh "echo deleting existing image and container"
                     try {
+                        sh "rm .env"
                         sh "docker kill middleware-service"
                         sh "docker rm middleware-service"
                         sh "docker rmi middleware-service"
