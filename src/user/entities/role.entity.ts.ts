@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateNotificationDto {
+export class Role {
+  @ApiProperty()
+  id: string;
+
   @ApiProperty()
   content: string;
 
@@ -9,4 +12,8 @@ export class CreateNotificationDto {
 
   @ApiProperty()
   sent_date: Date;
+
+  constructor(partial: Partial<Role>) {
+    Object.assign(this, partial);
+  }
 }

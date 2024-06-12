@@ -1,5 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
+import { Role } from '../entities/role.entity.ts';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({ required: false })
@@ -27,12 +28,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   phone?: string;
 
   @ApiProperty({ required: false })
-  role?: string;
+  role?: Role;
 
   @ApiProperty({ required: false })
   password?: string;
 
-  @ApiProperty({ default: '111111111111111111111111', required: false })
+  @ApiProperty({ default: '000000000000000000000000', required: false })
   id_restaurant?: string;
 
   @ApiProperty({ default: [], required: false })

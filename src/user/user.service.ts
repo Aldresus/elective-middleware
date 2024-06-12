@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
+import { AxiosResponse } from 'axios';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ReferUserDto } from './dto/refer-user.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
+import { UpdatePermissionsDto } from './dto/update-permissions.dto';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import { AxiosResponse } from 'axios';
-import { lastValueFrom } from 'rxjs';
-import { HttpService } from '@nestjs/axios';
 import { UserEntity } from './entities/user.entity';
 import { config } from 'config';
 
@@ -14,10 +17,23 @@ export class UserService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<any> {
+  async login(email: string, password: string): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.post<AxiosResponse<UserEntity>>(
-        this.baseUrl,
+        `${this.baseUrl}/login`,
+        {
+          email,
+          password,
+        },
+      ),
+    );
+    return response.data;
+  }
+
+  async register(createUserDto: CreateUserDto): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.post<AxiosResponse<UserEntity>>(
+        `${this.baseUrl}/register`,
         createUserDto,
       ),
     );
@@ -56,19 +72,44 @@ export class UserService {
     return response.data;
   }
 
-  async updateRefer(id: string, id_refer: string): Promise<any> {
+  async updateRefer(id: string, referUserDto: ReferUserDto): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<UserEntity>>(
-        `${this.baseUrl}/${id}/refer/${id_refer}`,
+        `${this.baseUrl}/${id}/refer`,
+        referUserDto,
       ),
     );
     return response.data;
   }
 
-  async removeRefer(id: string, id_refer: string): Promise<any> {
+  async removeRefer(id: string, referUserDto: ReferUserDto): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.delete<AxiosResponse<UserEntity>>(
-        `${this.baseUrl}/${id}/refer/${id_refer}`,
+        `${this.baseUrl}/${id}/refer`,
+        { data: referUserDto },
+      ),
+    );
+    return response.data;
+  }
+
+  async updateRole(id: string, updateRoleDto: UpdateRoleDto): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.patch<AxiosResponse<UserEntity>>(
+        `${this.baseUrl}/${id}/role`,
+        updateRoleDto,
+      ),
+    );
+    return response.data;
+  }
+
+  async updatePermissions(
+    id: string,
+    updatePermissionsDto: UpdatePermissionsDto,
+  ): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.patch<AxiosResponse<UserEntity>>(
+        `${this.baseUrl}/${id}/permissions`,
+        updatePermissionsDto,
       ),
     );
     return response.data;
