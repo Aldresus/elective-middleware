@@ -31,9 +31,9 @@ export class CreateUserDto {
   @ApiProperty()
   password: string;
 
-  @ApiProperty()
+  @ApiProperty({ default: '111111111111111111111111' })
   id_restaurant: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ default: [] })
   id_users?: Array<string>;
 }
