@@ -10,16 +10,9 @@ pipeline {
             steps {
                 script {
                     sh "echo deleting existing image and container"
-                    try {
-                        sh "rm .env"
-                        sh "docker kill middleware-service"
-                        sh "docker rm middleware-service"
-                        sh "docker rmi middleware-service"
-
-
-                    } catch (Exception e) {
-                        echo "No existing image or container to remove"
-                    }
+                    try {sh "rm .env"} catch (Exception e) {echo "No .env to remove"}
+                    try {sh "docker rm middleware-service -f"} catch (Exception e) {echo "No container to remove"}
+                    try {sh "docker rmi middleware-service"} catch (Exception e) {echo "No existing image to remove"}
                 }
             }
             post {

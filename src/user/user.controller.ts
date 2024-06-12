@@ -25,6 +25,8 @@ import { ReferUserDto } from './dto/refer-user.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { UpdatePermissionsDto } from './dto/update-permissions.dto';
 import { UserLoginDto } from './dto/login-user.dto';
+import { Permissions } from 'src/permission/permission.decorator';
+import { Permission } from 'src/permission/permission.enum';
 
 @Controller('api/user')
 @ApiTags('user')
@@ -44,12 +46,13 @@ export class UserController {
   }
 
   @Get()
+  @Permissions(Permission.READ_USER)
   @ApiOperation({ summary: 'Get users with optional filters' })
   @ApiCreatedResponse({ type: UserEntity, isArray: true })
   @ApiQuery({ name: 'id', required: false, type: String })
   @ApiQuery({ name: 'first_name', required: false, type: String })
   @ApiQuery({ name: 'last_name', required: false, type: String })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   findAll(
     @Query('id') idUser: string,
     @Query('first_name') firstName: string,
@@ -66,7 +69,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update user with ID' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: UpdateUserDto })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   update(@Param('id') id: string, @Body() updateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
@@ -74,7 +77,7 @@ export class UserController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user with ID' })
   @ApiCreatedResponse({ type: UserEntity })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }
@@ -83,7 +86,7 @@ export class UserController {
   @ApiOperation({ summary: 'Refer user' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: ReferUserDto })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   updateRefer(@Param('id') id: string, @Body() referUserDto: ReferUserDto) {
     return this.userService.updateRefer(id, referUserDto);
   }
@@ -92,7 +95,7 @@ export class UserController {
   @ApiOperation({ summary: 'Delete user refer' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: ReferUserDto })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   removeRefer(@Param('id') id: string, @Body() referUserDto: ReferUserDto) {
     return this.userService.removeRefer(id, referUserDto);
   }
@@ -101,7 +104,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update user role' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: UpdateRoleDto })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.userService.updateRole(id, updateRoleDto);
   }
@@ -110,7 +113,7 @@ export class UserController {
   @ApiOperation({ summary: 'Update user permissions' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: UpdatePermissionsDto })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   updatePermissions(
     @Param('id') id: string,
     @Body() updatePermissionsDto: UpdatePermissionsDto,
@@ -122,7 +125,7 @@ export class UserController {
   @ApiOperation({ summary: 'Create a notification' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: CreateNotificationDto })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   createUserNotifications(
     @Param('id') id: string,
     @Body() createNotificationDto: CreateNotificationDto,
@@ -133,7 +136,7 @@ export class UserController {
   @Get('/:id/notifications')
   @ApiOperation({ summary: 'Get notifications with user ID' })
   @ApiCreatedResponse({ type: UserEntity, isArray: true })
-  //@ApiBearerAuth('access-token')
+  @ApiBearerAuth('access-token')
   findUserNotifications(@Param('id') id: string) {
     console.log(id);
     return this.userService.findUserNotifications(id);
