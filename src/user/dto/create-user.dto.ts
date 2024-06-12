@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Role } from '../entities/role.entity.ts';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -26,12 +27,12 @@ export class CreateUserDto {
   phone: string;
 
   @ApiProperty()
-  role: string;
+  role: Role;
 
   @ApiProperty()
   password: string;
 
-  @ApiProperty({ default: '111111111111111111111111' })
+  @ApiProperty({ default: '000000000000000000000000' })
   id_restaurant: string;
 
   @ApiPropertyOptional({ default: [] })

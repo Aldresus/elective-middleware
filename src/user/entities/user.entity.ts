@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Notifications } from './notification.entity';
+import { Role } from './role.entity.ts';
 
 export class UserEntity {
   @ApiProperty()
@@ -33,7 +34,7 @@ export class UserEntity {
   phone: string;
 
   @ApiProperty()
-  role: string;
+  role: Role;
 
   @ApiProperty()
   password: string;
