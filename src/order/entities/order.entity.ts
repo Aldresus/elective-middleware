@@ -37,10 +37,10 @@ export class OrderEntity {
   @ApiProperty()
   delivery_accepted_datetime: Date;
 
-  @ApiProperty()
+  @ApiProperty({ default: '111111111111111111111111' })
   id_restaurant: string;
 
-  @ApiProperty()
+  @ApiProperty({ default: '111111111111111111111111' })
   id_user: string;
 
   createdAt: Date;

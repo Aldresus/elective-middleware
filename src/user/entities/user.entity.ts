@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Notifications } from './notification.entity';
-import { Role } from './role.entity.ts';
+import { Notification } from './notification.entity';
 
 export class UserEntity {
   @ApiProperty()
@@ -34,7 +33,7 @@ export class UserEntity {
   phone: string;
 
   @ApiProperty()
-  role: Role;
+  role: string;
 
   @ApiProperty()
   password: string;
@@ -46,7 +45,7 @@ export class UserEntity {
   id_users: Array<string>;
 
   @ApiProperty()
-  notifications: Array<Notifications>;
+  notifications: Array<Notification>;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

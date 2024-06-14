@@ -1,12 +1,12 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Permission } from './permission.enum';
-import { PERMISSIONS_KEY } from './permission.decorator';
+import { Role } from './role.enum';
+import { ROLES_KEY } from './role.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class PermissionsGuard implements CanActivate {
+export class RolesGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
@@ -14,12 +14,12 @@ export class PermissionsGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredPermissions = this.reflector.getAllAndOverride<Permission[]>(
-      PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
-    );
-    if (!requiredPermissions) {
-      // if no permissions are required, allow access
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (!requiredRoles) {
+      // if no roles are required, allow access
       return true;
     }
 
@@ -38,10 +38,20 @@ export class PermissionsGuard implements CanActivate {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
 
-      // If user has required permissions, grant access
-      return requiredPermissions.some((permission) =>
-        payload.role.permissions.includes(permission),
+      request.user = payload; // Attach the payload to the request object
+
+      // Check if user has the required roles
+      const hasRequiredRole = requiredRoles.some((role) =>
+        payload.role.roles.includes(role),
       );
+
+      if (!hasRequiredRole) {
+        return false;
+      }
+
+      // Attach roles to the request for later use
+      request.roles = payload.role.roles;
+      return true;
     } catch {
       // If token is invalid, deny access
       return false;

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { HttpModule } from '@nestjs/axios';
-import { PermissionsGuard } from 'src/permission/permission.guard';
+import { RolesGuard } from 'src/role/role.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
     UserService,
     {
       provide: APP_GUARD,
-      useClass: PermissionsGuard,
+      useClass: RolesGuard,
     },
     JwtService,
   ],

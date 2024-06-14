@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class Notifications {
-  @ApiProperty()
-  id: string;
-
+export class Notification {
   @ApiProperty()
   content: string;
 
@@ -13,7 +10,7 @@ export class Notifications {
   @ApiProperty()
   sent_date: Date;
 
-  constructor(partial: Partial<Notifications>) {
+  constructor(partial: Partial<Notification>) {
     Object.assign(this, partial);
   }
 }

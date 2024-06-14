@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Query,
+  Request,
+  ForbiddenException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import {
@@ -19,6 +21,9 @@ import {
 import { OrderEntity } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { Roles } from 'src/role/role.decorator';
+import { Role } from 'src/role/role.enum';
+import { msg } from 'config';
 
 @Controller('api/order')
 @ApiTags('order')
@@ -29,7 +34,7 @@ export class OrderController {
   @ApiOperation({ summary: 'Create an order' })
   @ApiCreatedResponse({ type: OrderEntity })
   @ApiBody({ type: CreateOrderDto })
-  create(@Body() createOrderDto: CreateOrderDto) {
+  create(@Body() createOrderDto: CreateOrderDto, @Request() req) {
     return this.orderService.create(createOrderDto);
   }
 
@@ -45,9 +50,8 @@ export class OrderController {
     @Query('id_restaurateur') idRestaurateur: string,
     @Query('id_user') idUser: string,
     @Query('status') status: string,
+    @Request() req,
   ) {
-    console.log(idOrder, idRestaurateur, idUser, status);
-
     return this.orderService.findMany({
       id_order: idOrder,
       id_restaurateur: idRestaurateur,
@@ -63,6 +67,7 @@ export class OrderController {
   update(
     @Param('id') id_order: string,
     @Body() updateOrderDto: UpdateOrderDto,
+    @Request() req,
   ) {
     return this.orderService.update(id_order, updateOrderDto);
   }
@@ -70,7 +75,7 @@ export class OrderController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete order with ID' })
   @ApiCreatedResponse({ type: UpdateOrderDto })
-  remove(@Param('id') id_order: string) {
+  remove(@Param('id') id_order: string, @Request() req) {
     return this.orderService.remove(id_order);
   }
 }
