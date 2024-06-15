@@ -60,12 +60,31 @@ export class UserService {
     first_name?: string;
     last_name?: string;
   }): Promise<any> {
-    const response = await lastValueFrom(
-      this.httpService.get<AxiosResponse<UserEntity[]>>(this.baseUrl, {
-        params: query,
-      }),
-    );
-    return response.data;
+    try {
+      console.log(this.baseUrl);
+      const response = await lastValueFrom(
+        this.httpService.get<AxiosResponse<UserEntity[]>>(this.baseUrl, {
+          params: query,
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        // AxiosError contient une réponse
+        const { status, data } = error.response;
+        console.error('AxiosError:', status, data);
+
+        // Transférez l'erreur en utilisant une exception NestJS appropriée
+        throw new HttpException(data, status);
+      } else {
+        // Autres erreurs (réseau, etc.)
+        console.error('Error:', error.message);
+        throw new HttpException(
+          'An error occurred while processing your request',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<any> {

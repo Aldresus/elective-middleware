@@ -30,6 +30,7 @@ import { UserLoginDto } from './dto/login-user.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
+import { log } from 'console';
 
 @Controller('api/user')
 @ApiTags('user')
@@ -71,29 +72,33 @@ export class UserController {
     @Request() req,
   ) {
     const user = req.user;
-    const roles = req.roles;
+    const role = req.role;
+    console.log('Roles: ', role);
 
-    if (roles.includes(Role.ADMIN || Role.TECHNICIAN || Role.COMMERCIAL)) {
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
       return this.userService.findMany({
         id: idUser,
         first_name: firstName,
         last_name: lastName,
       });
-    } else if (
-      roles.includes(
-        Role.CLIENT || Role.RESTAURATEUR || Role.DELIVERYMAN || Role.DEV,
-      )
+    }
+    if (
+      role === Role.CLIENT ||
+      role === Role.RESTAURATEUR ||
+      role === Role.DELIVERYMAN ||
+      role === Role.DEV
     ) {
       if (idUser === user.sub || !idUser) {
         return this.userService.findMany({
           id: user.sub,
         });
-      } else {
-        throw new ForbiddenException(msg.missing_perms);
       }
-    } else {
-      throw new ForbiddenException(msg.missing_perms);
     }
+    throw new ForbiddenException(msg.missing_perms);
   }
 
   @Patch(':id')

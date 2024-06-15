@@ -22,7 +22,6 @@ export class RolesGuard implements CanActivate {
       // if no roles are required, allow access
       return true;
     }
-
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
 
@@ -42,7 +41,7 @@ export class RolesGuard implements CanActivate {
 
       // Check if user has the required roles
       const hasRequiredRole = requiredRoles.some((role) =>
-        payload.role.roles.includes(role),
+        payload.role.includes(role),
       );
 
       if (!hasRequiredRole) {
@@ -50,7 +49,7 @@ export class RolesGuard implements CanActivate {
       }
 
       // Attach roles to the request for later use
-      request.roles = payload.role.roles;
+      request.role = payload.role;
       return true;
     } catch {
       // If token is invalid, deny access
