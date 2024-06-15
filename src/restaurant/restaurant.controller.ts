@@ -34,6 +34,14 @@ export class RestaurantController {
     return this.restaurantService.create(createRestaurantDto);
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Get restaurant with ID' })
+  @ApiCreatedResponse({ type: RestaurantEntity })
+  @ApiParam({ name: 'id', type: String })
+  findById(@Param('id') id_restaurant: string) {
+    return this.restaurantService.findById(id_restaurant);
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get restaurants with optional filters' })
   @ApiCreatedResponse({ type: RestaurantEntity, isArray: true })

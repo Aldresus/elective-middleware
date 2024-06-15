@@ -23,6 +23,15 @@ export class RestaurantService {
     return response.data;
   }
 
+  async findById(id_restaurant: string): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.get<AxiosResponse<RestaurantEntity>>(
+        `${this.baseUrl}/${id_restaurant}`,
+      ),
+    );
+    return response.data;
+  }
+
   async findMany(query: {
     name?: string;
     city?: string;
