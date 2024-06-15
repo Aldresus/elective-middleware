@@ -10,3 +10,7 @@ export const config = {
 export const msg = {
   missing_perms: 'You do not have the required permissions.',
 };
+
+export const msg = {
+  missing_perms: "Tu n'as pas le droit",
+};
