@@ -59,9 +59,9 @@ export class UserService {
     id?: string;
     first_name?: string;
     last_name?: string;
+    role?: string;
   }): Promise<any> {
     try {
-      console.log(this.baseUrl);
       const response = await lastValueFrom(
         this.httpService.get<AxiosResponse<UserEntity[]>>(this.baseUrl, {
           params: query,

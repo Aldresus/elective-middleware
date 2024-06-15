@@ -1,9 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from './role.enum';
 import { ROLES_KEY } from './role.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { msg } from 'config';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -18,12 +24,15 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+    console.log(requiredRoles);
     if (!requiredRoles) {
       // if no roles are required, allow access
       return true;
     }
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
+
+    console.log(authorizationHeader);
 
     if (!authorizationHeader) {
       // If no authorization header, deny access
@@ -36,6 +45,8 @@ export class RolesGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
+
+      console.log(payload);
 
       request.user = payload; // Attach the payload to the request object
 
@@ -53,7 +64,7 @@ export class RolesGuard implements CanActivate {
       return true;
     } catch {
       // If token is invalid, deny access
-      return false;
+      throw new ForbiddenException(msg.invalid_token);
     }
   }
 }

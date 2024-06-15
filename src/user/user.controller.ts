@@ -64,16 +64,17 @@ export class UserController {
   @ApiQuery({ name: 'id', required: false, type: String })
   @ApiQuery({ name: 'first_name', required: false, type: String })
   @ApiQuery({ name: 'last_name', required: false, type: String })
+  @ApiQuery({ name: 'role', required: false, type: String })
   @ApiBearerAuth('access-token')
   async findMany(
     @Query('id') idUser: string,
     @Query('first_name') firstName: string,
     @Query('last_name') lastName: string,
+    @Query('role') role_filter: string,
     @Request() req,
   ) {
     const user = req.user;
     const role = req.role;
-    console.log('Roles: ', role);
 
     if (
       role === Role.ADMIN ||
@@ -84,6 +85,7 @@ export class UserController {
         id: idUser,
         first_name: firstName,
         last_name: lastName,
+        role: role_filter,
       });
     }
     if (
