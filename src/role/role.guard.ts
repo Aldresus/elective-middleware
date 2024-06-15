@@ -24,15 +24,16 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    console.log(requiredRoles);
+    console.log('URL:', context.switchToHttp().getRequest().url);
+    console.log('RequiredRoles:', requiredRoles);
     if (!requiredRoles) {
-      // if no roles are required, allow access
+      console.log('No required roles');
       return true;
     }
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
 
-    console.log(authorizationHeader);
+    console.log('authorizationHeader:', authorizationHeader);
 
     if (!authorizationHeader) {
       // If no authorization header, deny access
@@ -56,6 +57,7 @@ export class RolesGuard implements CanActivate {
       );
 
       if (!hasRequiredRole) {
+        console.log('User does not have the required role');
         return false;
       }
 
@@ -64,7 +66,7 @@ export class RolesGuard implements CanActivate {
       return true;
     } catch (error) {
       console.log(error);
-      // If token is invalid, deny access
+      console.log('Invalid token');
       throw new ForbiddenException(msg.invalid_token);
     }
   }
