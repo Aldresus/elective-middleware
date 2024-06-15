@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DISCORD_WEBHOOK_URL = credentials('DISCORD_WEBHOOK_URL')
+        JWT_SECRET = credentials('JWT_SECRET')
     }
 
     stages {
@@ -24,6 +25,8 @@ pipeline {
         stage('build image') {
             steps {
                 script {
+                    echo "building image"
+                    sh "touch .env && echo JWT_SECRET=${JWT_SECRET} >> .env"
                     sh "docker build -t middleware-service ."
                 }
             }
