@@ -62,7 +62,8 @@ export class RolesGuard implements CanActivate {
       // Attach roles to the request for later use
       request.role = payload.role;
       return true;
-    } catch {
+    } catch (error) {
+      console.log(error);
       // If token is invalid, deny access
       throw new ForbiddenException(msg.invalid_token);
     }
