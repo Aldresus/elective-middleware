@@ -13,10 +13,19 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   description: string;
 
   @ApiProperty()
-  category: string;
+  product_image_url?: string;
 
   @ApiProperty({ default: '111111111111111111111111' })
   id_restaurant: string;
+
+  @ApiProperty({ default: [] })
+  ids_menus_products: string[];
+
+  @ApiProperty({ default: [] })
+  ids_menu_category: string[];
+
+  @ApiProperty({ default: [] })
+  ids_restaurant_category: string[];
 
   @ApiProperty()
   deleted: boolean;

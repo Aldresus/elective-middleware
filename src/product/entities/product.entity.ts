@@ -14,10 +14,19 @@ export class ProductEntity {
   description: string;
 
   @ApiProperty()
-  category: string;
+  product_image_url: string;
 
   @ApiProperty()
   id_restaurant: string;
+
+  @ApiProperty()
+  ids_menus_products: string[];
+
+  @ApiProperty()
+  ids_menu_category: string[];
+
+  @ApiProperty()
+  ids_restaurant_category: string[];
 
   @ApiProperty()
   deleted: boolean;
