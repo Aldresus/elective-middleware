@@ -1,10 +1,12 @@
 export const config = {
-  baseUrl_restaurant_api: 'http://localhost:3004/api/restaurant',
-  baseUrl_menu_api: 'http://localhost:3004/api/menu',
-  baseUrl_product_api: 'http://localhost:3004/api/product',
-  baseUrl_deliver_api: 'http://localhost:3003/api/deliver',
-  baseUrl_order_api: 'http://localhost:3002/api/order',
-  baseUrl_user_api: 'http://localhost:3001/api/user',
+  baseUrl_restaurant_api: 'http://restaurant.lihoco.fr/api/restaurant',
+  baseUrl_menu_api: 'http://restaurant.lihoco.fr/api/menu',
+  baseUrl_product_api: 'http://restaurant.lihoco.fr/api/product',
+  baseUrl_users_restaurants_api:
+    'http://restaurants.lihoco.fr/api/users_restaurant',
+  baseUrl_deliver_api: 'http://delivery.lihoco.fr/api/deliver',
+  baseUrl_order_api: 'http://order.lihoco.fr/api/order',
+  baseUrl_user_api: 'http://user.lihoco.fr/api/user',
 };
 
 export const msg = {
