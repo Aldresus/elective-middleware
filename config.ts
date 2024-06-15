@@ -8,3 +8,7 @@ export const config = {
   baseUrl_order_api: 'http://order.lihoco.fr/api/order',
   baseUrl_user_api: 'http://user.lihoco.fr/api/user',
 };
+
+export const msg = {
+  missing_perms: "Tu n'as pas le droit",
+};
