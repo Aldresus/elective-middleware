@@ -23,6 +23,15 @@ export class MenuService {
     return response.data;
   }
 
+  async getById(id_menu: string): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.get<AxiosResponse<MenuEntity>>(
+        `${this.baseUrl}/${id_menu}`,
+      ),
+    );
+    return response.data;
+  }
+
   async findMany(id_restaurant?: string, deleted?: string): Promise<any> {
     const params: any = {};
     if (id_restaurant) params.id_restaurant = id_restaurant;

@@ -34,6 +34,14 @@ export class MenuController {
     return this.menuService.create(createMenuDto);
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Get menu with ID' })
+  @ApiCreatedResponse({ type: MenuEntity })
+  @ApiParam({ name: 'id', type: String })
+  getById(@Param('id') id_menu: string) {
+    return this.menuService.getById(id_menu);
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get menus with optional filters' })
   @ApiCreatedResponse({ type: MenuEntity })
