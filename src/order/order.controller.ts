@@ -8,7 +8,6 @@ import {
   Delete,
   Query,
   Request,
-  ForbiddenException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import {
@@ -18,12 +17,12 @@ import {
   ApiQuery,
   ApiOperation,
 } from '@nestjs/swagger';
-import { OrderEntity } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
+import { OrderEntity } from './entities/order.entity';
 
 @Controller('api/order')
 @ApiTags('order')
@@ -36,6 +35,14 @@ export class OrderController {
   @ApiBody({ type: CreateOrderDto })
   create(@Body() createOrderDto: CreateOrderDto, @Request() req) {
     return this.orderService.create(createOrderDto);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get order with ID' })
+  @ApiCreatedResponse({ type: OrderEntity })
+  @ApiQuery({ name: 'id_order', required: true, type: String })
+  findById(@Param('id') id_order: string, @Request() req) {
+    return this.orderService.findById(id_order);
   }
 
   @Get()

@@ -4,8 +4,9 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { AxiosResponse } from 'axios';
 import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
-import { OrderEntity } from './entities/order.entity';
+
 import { config } from 'config';
+import { OrderEntity } from './entities/order.entity';
 
 @Injectable()
 export class OrderService {
@@ -18,6 +19,15 @@ export class OrderService {
       this.httpService.post<AxiosResponse<OrderEntity>>(
         this.baseUrl,
         createOrderDto,
+      ),
+    );
+    return response.data;
+  }
+
+  async findById(id_order: string): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.get<AxiosResponse<OrderEntity>>(
+        `${this.baseUrl}/${id_order}`,
       ),
     );
     return response.data;
