@@ -8,6 +8,6 @@ export const config = {
 };
 
 export const msg = {
-  missing_perms: 'You do not have the required permissions.',
-  invalid_token: 'Token invalid or expired. Please log in again.',
+  missing_perms: 'missing_perms',
+  invalid_token: 'invalid_token',
 };

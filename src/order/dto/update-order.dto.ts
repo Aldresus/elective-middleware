@@ -1,6 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateOrderDto } from './create-order.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateOrderDto } from './create-order.dto';
+import { UpdateOrderMenuDto } from './update-menu.dto';
+import { UpdateOrderProductDto } from './update-product.dto';
 
 export class UpdateOrderDto extends PartialType(CreateOrderDto) {
   @ApiProperty()
@@ -10,7 +12,7 @@ export class UpdateOrderDto extends PartialType(CreateOrderDto) {
   status: string;
 
   @ApiProperty()
-  price: string;
+  price: number;
 
   @ApiProperty()
   postal_code: string;
@@ -41,4 +43,10 @@ export class UpdateOrderDto extends PartialType(CreateOrderDto) {
 
   @ApiProperty({ default: '111111111111111111111111' })
   id_user: string;
+
+  @ApiProperty({ type: 'array' })
+  menus: Array<UpdateOrderMenuDto>;
+
+  @ApiProperty({ type: 'array' })
+  products: Array<UpdateOrderProductDto>;
 }
