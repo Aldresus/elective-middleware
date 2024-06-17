@@ -18,9 +18,6 @@ export class UpdateMenuDto extends PartialType(CreateMenuDto) {
   @ApiProperty()
   price: number;
 
-  @ApiProperty()
-  food_type: string;
-
   @ApiProperty({ default: '111111111111111111111111' })
   id_restaurant: string;
 
@@ -29,9 +26,6 @@ export class UpdateMenuDto extends PartialType(CreateMenuDto) {
 
   @ApiProperty({ default: [] })
   ids_restaurant_category: string[];
-
-  @ApiProperty({ default: [] })
-  ids_product: string[];
 }
 // {
 //   @ApiProperty()

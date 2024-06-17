@@ -17,9 +17,6 @@ export class MenuEntity {
   price: number;
 
   @ApiProperty()
-  food_type: string;
-
-  @ApiProperty()
   deleted: boolean;
 
   @ApiProperty()
@@ -30,9 +27,6 @@ export class MenuEntity {
 
   @ApiProperty()
   ids_restaurant_category: string[];
-
-  @ApiProperty()
-  ids_product: string[];
 
   @ApiProperty()
   createdAt: Date;

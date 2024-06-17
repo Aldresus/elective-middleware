@@ -10,4 +10,5 @@ export const config = {
 export const msg = {
   missing_perms: 'missing_perms',
   invalid_token: 'invalid_token',
+  restaurant_already_created: 'restaurant_already_created',
 };

@@ -26,14 +26,14 @@ import {
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
-import { CheckUtils } from './check_utils';
+import { Utils } from 'src/utils/utils';
 
 @Controller('api/restaurant')
 @ApiTags('restaurant')
 export class RestaurantController {
   constructor(
     private readonly restaurantService: RestaurantService,
-    private readonly checkUtils: CheckUtils,
+    private readonly utils: Utils,
   ) {}
 
   @Post()
@@ -55,11 +55,21 @@ export class RestaurantController {
     }
 
     if (role === Role.RESTAURATEUR) {
+      const restaurateur = (
+        await this.utils.getUserByID({
+          id: user.sub,
+        })
+      )[0];
+
+      if (restaurateur.id_resstaurant !== '000000000000000000000000') {
+        throw new ForbiddenException(msg.restaurant_already_created);
+      }
+
       const newRestaurant =
         await this.restaurantService.create(createRestaurantDto);
 
       // update user with restaurant ID
-      await this.checkUtils.setUserRestaurantID(user.sub, {
+      await this.utils.setUserRestaurantID(user.sub, {
         id_restaurant: newRestaurant.id_restaurant,
       });
 
@@ -129,7 +139,7 @@ export class RestaurantController {
       });
 
       const restaurateur = (
-        await this.checkUtils.getUserRestaurantID({
+        await this.utils.getUserByID({
           id: user.sub,
         })
       )[0];
@@ -201,7 +211,7 @@ export class RestaurantController {
       const data = await this.restaurantService.findById(id_restaurant);
 
       const restaurateur = (
-        await this.checkUtils.getUserRestaurantID({
+        await this.utils.getUserByID({
           id: user.sub,
         })
       )[0];
@@ -250,7 +260,7 @@ export class RestaurantController {
       return this.restaurantService.update(id_restaurant, updateRestaurantDto);
     } else if (role === Role.RESTAURATEUR) {
       const restaurateur = (
-        await this.checkUtils.getUserRestaurantID({
+        await this.utils.getUserByID({
           id: user.sub,
         })
       )[0];
@@ -287,7 +297,7 @@ export class RestaurantController {
       return this.restaurantService.remove(id_restaurant);
     } else if (role === Role.RESTAURATEUR) {
       const restaurateur = (
-        await this.checkUtils.getUserRestaurantID({
+        await this.utils.getUserByID({
           id: user.sub,
         })
       )[0];
