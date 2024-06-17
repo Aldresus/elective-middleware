@@ -24,25 +24,25 @@ import {
 } from '@nestjs/swagger';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { ReferUserDto } from './dto/refer-user.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
-import { UpdatePermissionsDto } from './dto/update-permissions.dto';
 import { UserLoginDto } from './dto/login-user.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
-import { log } from 'console';
+import { filter } from 'rxjs';
 
 @Controller('api/user')
 @ApiTags('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOperation({ summary: 'Login with credentials to get a token' })
   @Post('login')
   @ApiBody({ type: UserLoginDto })
   login(@Body() signInDto: UserLoginDto) {
     return this.userService.login(signInDto.email, signInDto.password);
   }
 
+  @ApiOperation({ summary: 'Register a new user' })
   @Post('register')
   @ApiBody({ type: CreateUserDto })
   register(@Body() createUserDto: CreateUserDto) {
@@ -95,9 +95,16 @@ export class UserController {
       role === Role.DEV
     ) {
       if (idUser === user.sub || !idUser) {
-        return this.userService.findMany({
+        const data = await this.userService.findMany({
           id: user.sub,
         });
+
+        const filteredData = data.map((user) => {
+          const { password, createdAt, updatedAt, ...rest } = user;
+          return rest;
+        });
+
+        return filteredData;
       }
     }
     throw new ForbiddenException(msg.missing_perms);
@@ -117,7 +124,7 @@ export class UserController {
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: UpdateUserDto })
   @ApiBearerAuth('access-token')
-  update(@Param('id') id: string, @Body() updateUserDto, @Request() req) {
+  async update(@Param('id') id: string, @Body() updateUserDto, @Request() req) {
     const user = req.user;
     const role = req.role;
 
@@ -135,67 +142,199 @@ export class UserController {
       role === Role.DEV
     ) {
       if (id === user.sub || !id) {
-        return this.userService.update(user.sub, updateUserDto);
+        const { role, id_restaurant, id_users, ...filteredUpdateUserDto } =
+          updateUserDto;
+
+        const data = await this.userService.update(user.sub, updateUserDto);
+
+        const { password, createdAt, updatedAt, ...filteredData } = data;
+
+        return filteredData;
       }
     }
     throw new ForbiddenException(msg.missing_perms);
   }
 
   @Delete(':id')
+  @Roles(
+    Role.ADMIN,
+    Role.CLIENT,
+    Role.RESTAURATEUR,
+    Role.DELIVERYMAN,
+    Role.COMMERCIAL,
+    Role.DEV,
+    Role.TECHNICIAN,
+  )
   @ApiOperation({ summary: 'Delete user with ID' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBearerAuth('access-token')
-  remove(@Param('id') id: string, @Request() req) {
+  async remove(@Param('id') id: string, @Request() req) {
     const user = req.user;
-    const roles = req.roles;
+    const role = req.role;
 
-    return this.userService.remove(id);
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.userService.remove(id);
+    }
+    if (
+      role === Role.CLIENT ||
+      role === Role.RESTAURATEUR ||
+      role === Role.DELIVERYMAN ||
+      role === Role.DEV
+    ) {
+      if (id === user.sub || !id) {
+        const data = await this.userService.remove(user.sub);
+
+        const { password, createdAt, updatedAt, ...filteredData } = data;
+
+        return filteredData;
+      }
+    }
+    throw new ForbiddenException('Missing permissions');
   }
 
   @Patch(':id/refer')
+  @Roles(
+    Role.ADMIN,
+    Role.CLIENT,
+    Role.RESTAURATEUR,
+    Role.DELIVERYMAN,
+    Role.COMMERCIAL,
+    Role.DEV,
+    Role.TECHNICIAN,
+  )
   @ApiOperation({ summary: 'Refer user' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: ReferUserDto })
   @ApiBearerAuth('access-token')
-  updateRefer(
+  async updateRefer(
     @Param('id') id: string,
     @Body() referUserDto: ReferUserDto,
     @Request() req,
   ) {
-    return this.userService.updateRefer(id, referUserDto);
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.userService.updateRefer(id, referUserDto);
+    }
+    if (
+      role === Role.CLIENT ||
+      role === Role.RESTAURATEUR ||
+      role === Role.DELIVERYMAN ||
+      role === Role.DEV
+    ) {
+      if (id === user.sub) {
+        const data = await this.userService.updateRefer(user.sub, referUserDto);
+
+        const { password, createdAt, updatedAt, ...filteredData } = data;
+
+        return filteredData;
+      }
+    }
+    throw new ForbiddenException('Missing permissions');
   }
 
   @Delete(':id/refer')
+  @Roles(
+    Role.ADMIN,
+    Role.CLIENT,
+    Role.RESTAURATEUR,
+    Role.DELIVERYMAN,
+    Role.COMMERCIAL,
+    Role.DEV,
+    Role.TECHNICIAN,
+  )
   @ApiOperation({ summary: 'Delete user refer' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: ReferUserDto })
   @ApiBearerAuth('access-token')
-  removeRefer(
+  async removeRefer(
     @Param('id') id: string,
     @Body() referUserDto: ReferUserDto,
     @Request() req,
   ) {
-    return this.userService.removeRefer(id, referUserDto);
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.CLIENT ||
+      role === Role.RESTAURATEUR ||
+      role === Role.DELIVERYMAN ||
+      role === Role.DEV
+    ) {
+      if (id === user.sub || !id) {
+        const data = await this.userService.removeRefer(user.sub, referUserDto);
+
+        const { password, createdAt, updatedAt, ...filteredData } = data;
+
+        return filteredData;
+      }
+    }
+
+    throw new ForbiddenException('Missing permissions');
   }
 
   @Post('/:id/notifications')
+  @Roles(Role.ADMIN, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Create a notification' })
   @ApiCreatedResponse({ type: UserEntity })
   @ApiBody({ type: CreateNotificationDto })
   @ApiBearerAuth('access-token')
-  createUserNotifications(
+  async createUserNotifications(
     @Param('id') id: string,
     @Body() createNotificationDto: CreateNotificationDto,
     @Request() req,
   ) {
-    return this.userService.createUserNotifications(id, createNotificationDto);
+    const data = await this.userService.createUserNotifications(
+      id,
+      createNotificationDto,
+    );
+
+    return data;
   }
 
   @Get('/:id/notifications')
+  @Roles(
+    Role.ADMIN,
+    Role.CLIENT,
+    Role.RESTAURATEUR,
+    Role.DELIVERYMAN,
+    Role.COMMERCIAL,
+    Role.DEV,
+    Role.TECHNICIAN,
+  )
   @ApiOperation({ summary: 'Get notifications with user ID' })
   @ApiCreatedResponse({ type: UserEntity, isArray: true })
   @ApiBearerAuth('access-token')
-  findUserNotifications(@Param('id') id: string, @Request() req) {
-    return this.userService.findUserNotifications(id);
+  async findUserNotifications(@Param('id') id: string, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.userService.findUserNotifications(id);
+    }
+    if (
+      role === Role.CLIENT ||
+      role === Role.RESTAURATEUR ||
+      role === Role.DELIVERYMAN ||
+      role === Role.DEV
+    ) {
+      if (id === user.sub || !id) {
+        return this.userService.findUserNotifications(user.sub);
+      }
+    }
+    throw new ForbiddenException(msg.missing_perms);
   }
 }

@@ -5,8 +5,6 @@ import { AxiosResponse } from 'axios';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ReferUserDto } from './dto/refer-user.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
-import { UpdatePermissionsDto } from './dto/update-permissions.dto';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UserEntity } from './entities/user.entity';
 import { config } from 'config';
@@ -121,29 +119,6 @@ export class UserService {
       this.httpService.delete<AxiosResponse<UserEntity>>(
         `${this.baseUrl}/${id}/refer`,
         { data: referUserDto },
-      ),
-    );
-    return response.data;
-  }
-
-  async updateRole(id: string, updateRoleDto: UpdateRoleDto): Promise<any> {
-    const response = await lastValueFrom(
-      this.httpService.patch<AxiosResponse<UserEntity>>(
-        `${this.baseUrl}/${id}/role`,
-        updateRoleDto,
-      ),
-    );
-    return response.data;
-  }
-
-  async updatePermissions(
-    id: string,
-    updatePermissionsDto: UpdatePermissionsDto,
-  ): Promise<any> {
-    const response = await lastValueFrom(
-      this.httpService.patch<AxiosResponse<UserEntity>>(
-        `${this.baseUrl}/${id}/permissions`,
-        updatePermissionsDto,
       ),
     );
     return response.data;
