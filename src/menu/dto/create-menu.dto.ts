@@ -8,14 +8,23 @@ export class CreateMenuDto {
   description: string;
 
   @ApiProperty()
+  menu_image_url: string;
+
+  @ApiProperty()
   price: number;
 
   @ApiProperty()
-  category: string;
+  food_type: string;
 
-  @ApiProperty({ default: '111111111111111111111111' })
+  @ApiProperty()
   id_restaurant: string;
 
   @ApiProperty()
-  menu_ordered_categories: string;
+  ids_menu_category: string[];
+
+  @ApiProperty()
+  ids_restaurant_category: string[];
+
+  @ApiProperty()
+  ids_product: string[];
 }
