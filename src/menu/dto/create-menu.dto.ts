@@ -14,9 +14,6 @@ export class CreateMenuDto {
   price: number;
 
   @ApiProperty()
-  food_type: string;
-
-  @ApiProperty()
   id_restaurant: string;
 
   @ApiProperty()

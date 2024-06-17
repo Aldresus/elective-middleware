@@ -17,9 +17,6 @@ export class MenuEntity {
   price: number;
 
   @ApiProperty()
-  food_type: string;
-
-  @ApiProperty()
   deleted: boolean;
 
   @ApiProperty()
