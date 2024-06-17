@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Notification } from './notification.entity';
 
 export class UserEntity {
   @ApiProperty()
