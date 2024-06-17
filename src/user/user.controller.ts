@@ -142,6 +142,9 @@ export class UserController {
       role === Role.DEV
     ) {
       if (id === user.sub || !id) {
+        const { role, id_restaurant, id_users, ...filteredUpdateUserDto } =
+          updateUserDto;
+
         const data = await this.userService.update(user.sub, updateUserDto);
 
         const { password, createdAt, updatedAt, ...filteredData } = data;
