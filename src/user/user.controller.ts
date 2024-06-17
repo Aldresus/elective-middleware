@@ -119,23 +119,26 @@ export class UserController {
   @ApiBearerAuth('access-token')
   update(@Param('id') id: string, @Body() updateUserDto, @Request() req) {
     const user = req.user;
-    const roles = req.roles;
+    const role = req.role;
 
-    if (roles.includes(Role.ADMIN || Role.TECHNICIAN || Role.COMMERCIAL)) {
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
       return this.userService.update(id, updateUserDto);
-    } else if (
-      roles.includes(
-        Role.CLIENT || Role.RESTAURATEUR || Role.DELIVERYMAN || Role.DEV,
-      )
+    }
+    if (
+      role === Role.CLIENT ||
+      role === Role.RESTAURATEUR ||
+      role === Role.DELIVERYMAN ||
+      role === Role.DEV
     ) {
       if (id === user.sub || !id) {
         return this.userService.update(user.sub, updateUserDto);
-      } else {
-        throw new ForbiddenException(msg.missing_perms);
       }
-    } else {
-      throw new ForbiddenException(msg.missing_perms);
     }
+    throw new ForbiddenException(msg.missing_perms);
   }
 
   @Delete(':id')
@@ -193,9 +196,6 @@ export class UserController {
   @ApiCreatedResponse({ type: UserEntity, isArray: true })
   @ApiBearerAuth('access-token')
   findUserNotifications(@Param('id') id: string, @Request() req) {
-    const user = req.user;
-    const roles = req.roles;
-
     return this.userService.findUserNotifications(id);
   }
 }
