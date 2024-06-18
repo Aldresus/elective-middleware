@@ -6,6 +6,8 @@ import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { MenuEntity } from './entities/menu.entity'; // Assurez-vous d'avoir cette entité
 import { config } from 'config';
+import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
+import { CategoryEntity } from './entities/category.entity';
 
 @Injectable()
 export class MenuService {
@@ -58,6 +60,16 @@ export class MenuService {
     const response = await lastValueFrom(
       this.httpService.delete<AxiosResponse<MenuEntity>>(
         `${this.baseUrl}/${id_menu}`,
+      ),
+    );
+    return response.data;
+  }
+
+  async updateCategory(updateProductCategoryDto: UpdateProductCategoryDto): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.patch<AxiosResponse<CategoryEntity>>(
+        `${this.baseUrl}/productCategory`,
+        updateProductCategoryDto,
       ),
     );
     return response.data;

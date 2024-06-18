@@ -23,6 +23,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { MenuEntity } from './entities/menu.entity';
+import { CategoryEntity } from './entities/category.entity';
+import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { Utils } from 'src/utils/utils';
@@ -151,6 +153,14 @@ export class MenuController {
       return rest;
     }
     throw new ForbiddenException(msg.missing_perms);
+  }
+
+  @Patch('productCategory')
+  @ApiOperation({ summary: 'Update menu category with ID' })
+  @ApiCreatedResponse({ type: CategoryEntity })
+  @ApiBody({ type: UpdateProductCategoryDto })
+  updateCategory(@Body() updateProductCategoryDto: UpdateProductCategoryDto) {
+    return this.menuService.updateCategory(updateProductCategoryDto);
   }
 
   @Patch(':id')
