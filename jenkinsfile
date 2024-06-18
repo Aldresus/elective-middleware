@@ -18,7 +18,10 @@ pipeline {
             }
             post {
                 failure {
-                    discordSend description: "Failed to clear existing image and container.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    script {
+                        def committerName = sh(script: 'git log -1 --pretty=format:"%cn"', returnStdout: true).trim()
+                        discordSend description: "Failed to clear existing image and container. Committer: ${committerName}", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    }
                 }
             }
         }
@@ -32,7 +35,10 @@ pipeline {
             }
             post {
                 failure {
-                    discordSend description: "Failed to build image by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    script {
+                        def committerName = sh(script: 'git log -1 --pretty=format:"%cn"', returnStdout: true).trim()
+                        discordSend description: "Failed to build image. Committer: ${committerName}", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    }
                 }
             }
         }
@@ -44,15 +50,21 @@ pipeline {
             }
             post {
                 success {
-                    discordSend description: "Deployed image successfully by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    script {
+                        def committerName = sh(script: 'git log -1 --pretty=format:"%cn"', returnStdout: true).trim()
+                        discordSend description: "Deployed image successfully. Committer: ${committerName}", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    }
                 }
                 failure {
-                    discordSend description: "Failed to deploy image by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    script {
+                        def committerName = sh(script: 'git log -1 --pretty=format:"%cn"', returnStdout: true).trim()
+                        discordSend description: "Failed to deploy image. Committer: ${committerName}", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    }
                 }
             }
         }
     }
-}
+}  
 
 def dockerExec(command) {
     sh "docker exec ${CONTAINER_NAME} ${command}"
