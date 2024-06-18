@@ -13,15 +13,6 @@ export class UserEntity {
   @ApiProperty()
   email: string;
 
-  @ApiProperty()
-  postal_code: string;
-
-  @ApiProperty()
-  address: string;
-
-  @ApiProperty()
-  city: string;
-
   created_at: Date;
   edited_at: Date;
 

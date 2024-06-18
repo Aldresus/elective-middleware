@@ -11,15 +11,6 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty()
-  postal_code: string;
-
-  @ApiProperty()
-  address: string;
-
-  @ApiProperty()
-  city: string;
-
-  @ApiProperty()
   birthday: string;
 
   @ApiProperty()
