@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { config } from 'config';
 import { lastValueFrom } from 'rxjs';
+import { DeliverEntity } from 'src/deliver/entities/deliver.entity';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 
@@ -11,6 +12,7 @@ export class Utils {
   private readonly baseUrl_user_api: string = config.baseUrl_user_api;
   private readonly baseUrl_restaurant_api: string =
     config.baseUrl_restaurant_api;
+  private readonly baseUrl_deliver_api: string = config.baseUrl_deliver_api;
   constructor(private readonly httpService: HttpService) {}
 
   async getUserByID(query: { id?: string }): Promise<any> {
@@ -84,5 +86,17 @@ export class Utils {
         );
       }
     }
+  }
+
+  async findDeliveriesByIdUser(query: { id_user?: string }): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.get<AxiosResponse<DeliverEntity[]>>(
+        this.baseUrl_deliver_api,
+        {
+          params: query,
+        },
+      ),
+    );
+    return response.data;
   }
 }

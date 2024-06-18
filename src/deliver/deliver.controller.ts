@@ -56,7 +56,7 @@ export class DeliverController {
   }
 
   @Get()
-  @Roles(Role.ADMIN, Role.CLIENT, Role.COMMERCIAL, Role.TECHNICIAN)
+  @Roles(Role.ADMIN, Role.DELIVERYMAN, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Get deliveries with optional filters' })
   @ApiCreatedResponse({ type: DeliverEntity, isArray: true })
   @ApiQuery({ name: 'id_user', required: false, type: String })
@@ -92,7 +92,7 @@ export class DeliverController {
         rating_lt: ratingLT === undefined ? undefined : Number(ratingLT),
       });
     }
-    if (role === Role.CLIENT) {
+    if (role === Role.DELIVERYMAN) {
       if (user.sub == idUser || !idUser) {
         return this.deliverService.findMany({
           id_user: user.sub,
@@ -132,7 +132,7 @@ export class DeliverController {
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN, Role.CLIENT, Role.COMMERCIAL, Role.TECHNICIAN)
+  @Roles(Role.ADMIN, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Delete delivery with ID' })
   @ApiCreatedResponse({ type: DeliverEntity })
   @ApiBearerAuth('access-token')
