@@ -28,7 +28,6 @@ import { UserLoginDto } from './dto/login-user.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
-import { filter } from 'rxjs';
 
 @Controller('api/user')
 @ApiTags('user')
@@ -38,14 +37,14 @@ export class UserController {
   @ApiOperation({ summary: 'Login with credentials to get a token' })
   @Post('login')
   @ApiBody({ type: UserLoginDto })
-  login(@Body() signInDto: UserLoginDto) {
+  async login(@Body() signInDto: UserLoginDto) {
     return this.userService.login(signInDto.email, signInDto.password);
   }
 
   @ApiOperation({ summary: 'Register a new user' })
   @Post('register')
   @ApiBody({ type: CreateUserDto })
-  register(@Body() createUserDto: CreateUserDto) {
+  async register(@Body() createUserDto: CreateUserDto) {
     return this.userService.register(createUserDto);
   }
 

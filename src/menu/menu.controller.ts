@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   Query,
+  Request,
+  ForbiddenException,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOperation,
@@ -22,19 +25,52 @@ import {
 import { MenuEntity } from './entities/menu.entity';
 import { CategoryEntity } from './entities/category.entity';
 import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
+import { Roles } from 'src/role/role.decorator';
+import { Role } from 'src/role/role.enum';
+import { Utils } from 'src/utils/utils';
+import { msg } from 'config';
 import { CreateCategoryDto } from './dto/create-category';
 
 @Controller('api/menu')
 @ApiTags('menu')
 export class MenuController {
-  constructor(private readonly menuService: MenuService) {}
+  constructor(
+    private readonly menuService: MenuService,
+    private readonly utils: Utils,
+  ) {}
 
   @Post()
+  @Roles(Role.ADMIN, Role.RESTAURATEUR, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Create a menu' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiBody({ type: CreateMenuDto })
-  create(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.create(createMenuDto);
+  @ApiBearerAuth('access-token')
+  async create(@Body() createMenuDto: CreateMenuDto, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.menuService.create(createMenuDto);
+    }
+    if (role === Role.RESTAURATEUR) {
+      const restaurateur = (
+        await this.utils.getUserByID({
+          id: user.sub,
+        })
+      )[0];
+
+      console.log('RESTAURATEUR: ', restaurateur);
+      console.log('CREATE MENU DTO: ', createMenuDto);
+
+      if (restaurateur.id_restaurant === createMenuDto.id_restaurant) {
+        return this.menuService.create(createMenuDto);
+      }
+    }
+    throw new ForbiddenException(msg.missing_perms);
   }
 
   @Post('category')
@@ -46,24 +82,86 @@ export class MenuController {
   }
 
   @Get(':id')
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Get menu with ID' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiParam({ name: 'id', type: String })
-  getById(@Param('id') id_menu: string) {
+  @ApiBearerAuth('access-token')
+  async getById(@Param('id') id_menu: string, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.menuService.getById(id_menu);
+    }
+    if (role === Role.RESTAURATEUR) {
+      const data = await this.menuService.getById(id_menu);
+
+      const { id_restaurant, ...rest } = data;
+
+      return rest;
+    }
+    if (
+      role === Role.CLIENT ||
+      role === Role.DEV ||
+      role === Role.DELIVERYMAN
+    ) {
+      return this.menuService.getById(id_menu);
+    }
+
     return this.menuService.getById(id_menu);
   }
 
   @Get()
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Get menus with optional filters' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiQuery({ name: 'id_restaurant', required: false, type: String })
-  @ApiQuery({ name: 'deleted', required: false, type: Boolean })
-  findAll(
-    @Query('id_restaurant') idRestaurant: string,
-    @Query('deleted') deleted: string,
-  ) {
-    console.log(idRestaurant, deleted);
-    return this.menuService.findMany(idRestaurant, deleted);
+  @ApiBearerAuth('access-token')
+  async findAll(@Query('id_restaurant') idRestaurant: string, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.menuService.findMany(idRestaurant);
+    }
+    if (
+      role === Role.RESTAURATEUR ||
+      role === Role.CLIENT ||
+      role === Role.DEV ||
+      role === Role.DELIVERYMAN
+    ) {
+      const data = await this.menuService.findMany(idRestaurant);
+
+      const { createdAt, updatedAt, ...rest } = data;
+
+      return rest;
+    }
+    throw new ForbiddenException(msg.missing_perms);
   }
 
   @Patch('productCategory')
@@ -75,20 +173,75 @@ export class MenuController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.RESTAURATEUR, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Update menu with ID' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiBody({ type: UpdateMenuDto })
   @ApiParam({ name: 'id', type: String })
-  update(@Param('id') id_menu: string, @Body() updateMenuDto: UpdateMenuDto) {
-    return this.menuService.update(id_menu, updateMenuDto);
+  @ApiBearerAuth('access-token')
+  async update(
+    @Param('id') id_menu: string,
+    @Body() updateMenuDto: UpdateMenuDto,
+    @Request() req,
+  ) {
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.menuService.update(id_menu, updateMenuDto);
+    }
+    if (role === Role.RESTAURATEUR) {
+      const data = await this.menuService.getById(id_menu);
+      const restaurateur = (
+        await this.utils.getUserByID({
+          id: user.sub,
+        })
+      )[0];
+
+      console.log('DATA PATCH: ', data);
+      console.log('RESTAURATEUR: ', restaurateur);
+
+      if (restaurateur.id_restaurant === data.id_restaurant) {
+        return this.menuService.update(id_menu, updateMenuDto);
+      }
+    }
+    throw new ForbiddenException(msg.missing_perms);
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN, Role.RESTAURATEUR, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Delete menu with ID' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiParam({ name: 'id', type: String })
-  remove(@Param('id') id_menu: string) {
-    return this.menuService.remove(id_menu);
+  @ApiBearerAuth('access-token')
+  async remove(@Param('id') id_menu: string, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.menuService.remove(id_menu);
+    }
+    if (role === Role.RESTAURATEUR) {
+      const data = await this.menuService.getById(id_menu);
+      const restaurateur = (
+        await this.utils.getUserByID({
+          id: user.sub,
+        })
+      )[0];
+
+      if (data.id_restaurant === restaurateur.id_restaurant) {
+        return this.menuService.remove(id_menu);
+      }
+    }
+    throw new ForbiddenException(msg.missing_perms);
   }
 
   @Delete('category/:id')

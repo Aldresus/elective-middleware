@@ -29,9 +29,6 @@ export class MenuEntity {
   ids_restaurant_category: string[];
 
   @ApiProperty()
-  ids_product: string[];
-
-  @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()

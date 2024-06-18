@@ -35,11 +35,11 @@ export class ProductService {
     return response.data;
   }
 
-  async findUnique(
-    id_product: string
-  ): Promise<any> {
+  async findUnique(id_product: string): Promise<any> {
     const response = await lastValueFrom(
-      this.httpService.get<AxiosResponse<ProductEntity[]>>(`${this.baseUrl}/${id_product}`),
+      this.httpService.get<AxiosResponse<ProductEntity[]>>(
+        `${this.baseUrl}/${id_product}`,
+      ),
     );
     return response.data;
   }

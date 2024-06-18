@@ -26,9 +26,6 @@ export class UpdateMenuDto extends PartialType(CreateMenuDto) {
 
   @ApiProperty({ default: [] })
   ids_restaurant_category: string[];
-
-  @ApiProperty({ default: [] })
-  ids_product: string[];
 }
 // {
 //   @ApiProperty()

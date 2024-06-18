@@ -13,7 +13,8 @@ export const config = {
   baseUrl_user_api: 'http://localhost:3002/api/user'
 };
 
-export const msg = {   
-  missing_perms: 'You do not have the required permissions.',   
-  invalid_token: 'Token invalid or expired. Please log in again.', 
+export const msg = {
+  missing_perms: 'missing_perms',
+  invalid_token: 'invalid_token',
+  restaurant_already_created: 'restaurant_already_created',
 };
