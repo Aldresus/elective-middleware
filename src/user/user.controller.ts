@@ -264,6 +264,14 @@ export class UserController {
     const role = req.role;
 
     if (
+      role === Role.ADMIN ||
+      role === Role.TECHNICIAN ||
+      role === Role.COMMERCIAL
+    ) {
+      return this.userService.removeRefer(id, referUserDto);
+    }
+
+    if (
       role === Role.CLIENT ||
       role === Role.RESTAURATEUR ||
       role === Role.DELIVERYMAN ||

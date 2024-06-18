@@ -20,9 +20,6 @@ export class ProductEntity {
   id_restaurant: string;
 
   @ApiProperty()
-  ids_menus_products: string[];
-
-  @ApiProperty()
   ids_menu_category: string[];
 
   @ApiProperty()
