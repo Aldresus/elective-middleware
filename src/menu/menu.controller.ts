@@ -20,6 +20,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { MenuEntity } from './entities/menu.entity';
+import { CategoryEntity } from './entities/category.entity';
+import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
 
 @Controller('api/menu')
 @ApiTags('menu')
@@ -53,6 +55,14 @@ export class MenuController {
   ) {
     console.log(idRestaurant, deleted);
     return this.menuService.findMany(idRestaurant, deleted);
+  }
+
+  @Patch('productCategory')
+  @ApiOperation({ summary: 'Update menu category with ID' })
+  @ApiCreatedResponse({ type: CategoryEntity })
+  @ApiBody({ type: UpdateProductCategoryDto })
+  updateCategory(@Body() updateProductCategoryDto: UpdateProductCategoryDto) {
+    return this.menuService.updateCategory(updateProductCategoryDto);
   }
 
   @Patch(':id')

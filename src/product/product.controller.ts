@@ -50,12 +50,12 @@ export class ProductController {
     });
   }
 
-  @Get(':id_product')
+  @Get(':id')
   @ApiOperation({ summary: 'Get products with optional filters' })
   @ApiCreatedResponse({ type: ProductEntity, isArray: true })
-  @ApiParam({ name: 'id_product', type: String })
+  @ApiParam({ name: 'id', type: String })
   findAllProducts(
-    @Param('id_product') idProduct: string,
+    @Param('id') idProduct: string,
   ) {
     console.log(idProduct);
     return this.productService.findUnique(idProduct);
