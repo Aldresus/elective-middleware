@@ -18,7 +18,7 @@ pipeline {
             }
             post {
                 failure {
-                    discordSend description: "Failed to clear existing image and container.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    discordSend description: "Failed to clear existing image and container by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
             }
             post {
                 failure {
-                    discordSend description: "Failed to build image.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    discordSend description: "Failed to build image by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
             }
         }
@@ -44,15 +44,15 @@ pipeline {
             }
             post {
                 success {
-                    discordSend description: "Deployed image successfully.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    discordSend description: "Deployed image successfully by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
                 failure {
-                    discordSend description: "Failed to deploy image.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
+                    discordSend description: "Failed to deploy image by ${env.CHANGE_AUTHOR}.", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${DISCORD_WEBHOOK_URL}"
                 }
             }
         }
     }
-}  
+}
 
 def dockerExec(command) {
     sh "docker exec ${CONTAINER_NAME} ${command}"
