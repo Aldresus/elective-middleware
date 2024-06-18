@@ -8,6 +8,7 @@ import { MenuEntity } from './entities/menu.entity'; // Assurez-vous d'avoir cet
 import { config } from 'config';
 import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
 import { CategoryEntity } from './entities/category.entity';
+import { CreateCategoryDto } from './dto/create-category';
 
 @Injectable()
 export class MenuService {
@@ -66,11 +67,30 @@ export class MenuService {
     return response.data;
   }
 
+  async createCategory(createCategoryDto: CreateCategoryDto){
+    const response = await lastValueFrom(
+      this.httpService.post<AxiosResponse<CategoryEntity>>(
+        `${this.baseUrl}/category`,
+        createCategoryDto,
+      ),
+    );
+    return response.data;
+  }
+
   async updateCategory(updateProductCategoryDto: UpdateProductCategoryDto): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<CategoryEntity>>(
         `${this.baseUrl}/productCategory`,
         updateProductCategoryDto,
+      ),
+    );
+    return response.data;
+  }
+
+  async removeCategory(id_category: string): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.delete<AxiosResponse<MenuEntity>>(
+        `${this.baseUrl}/category/${id_category}`,
       ),
     );
     return response.data;
