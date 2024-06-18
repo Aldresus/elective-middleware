@@ -50,6 +50,17 @@ export class ProductController {
     });
   }
 
+  @Get(':id_product')
+  @ApiOperation({ summary: 'Get products with optional filters' })
+  @ApiCreatedResponse({ type: ProductEntity, isArray: true })
+  @ApiParam({ name: 'id_product', type: String })
+  findAllProducts(
+    @Param('id_product') idProduct: string,
+  ) {
+    console.log(idProduct);
+    return this.productService.findUnique(idProduct);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Update product with ID' })
   @ApiCreatedResponse({ type: ProductEntity })
