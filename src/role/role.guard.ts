@@ -26,12 +26,18 @@ export class RolesGuard implements CanActivate {
     ]);
     console.log('URL:', context.switchToHttp().getRequest().url);
     console.log('RequiredRoles:', requiredRoles);
+
+    const request = context.switchToHttp().getRequest();
+    const authorizationHeader = request.headers['authorization'];
+
+    // REMOVE FOR PRODUCTION
+    request.role = 'ADMIN';
+    return true;
+    // REMOVE FOR PRODUCTION
     if (!requiredRoles) {
       console.log('No required roles');
       return true;
     }
-    const request = context.switchToHttp().getRequest();
-    const authorizationHeader = request.headers['authorization'];
 
     console.log('authorizationHeader:', authorizationHeader);
 
