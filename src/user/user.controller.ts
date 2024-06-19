@@ -93,7 +93,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `get by ${user} (${role})`,
+      message: `get by ${user.id_user}id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -151,7 +151,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `patch by ${user} (${role})`,
+      message: `patch by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -201,7 +201,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `delete by ${user} (${role})`,
+      message: `delete by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -253,7 +253,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `update refer by ${user} (${role})`,
+      message: `update refer by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -305,7 +305,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `delete refer by ${user} (${role})`,
+      message: `delete refer by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -351,7 +351,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `post notification by ${user} (${role})`,
+      message: `post notification by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -382,7 +382,7 @@ export class UserController {
 
     this.utils.addLog({
       service: 'USER',
-      message: `get notication by ${user} (${role})`,
+      message: `get notication by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 

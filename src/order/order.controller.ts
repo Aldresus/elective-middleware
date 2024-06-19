@@ -50,7 +50,7 @@ export class OrderController {
 
     this.utils.addLog({
       service: 'ORDER',
-      message: `post by ${user} (${role})`,
+      message: `post by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -91,7 +91,7 @@ export class OrderController {
 
     this.utils.addLog({
       service: 'ORDER',
-      message: `get by id by ${user} (${role})`,
+      message: `get by id by ${user.id_user}id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -166,7 +166,7 @@ export class OrderController {
 
     this.utils.addLog({
       service: 'ORDER',
-      message: `get by ${user} (${role})`,
+      message: `get by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -280,7 +280,7 @@ export class OrderController {
 
     this.utils.addLog({
       service: 'ORDER',
-      message: `patch by ${user} (${role})`,
+      message: `patch by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -336,7 +336,7 @@ export class OrderController {
 
     this.utils.addLog({
       service: 'ORDER',
-      message: `delete by ${user} (${role})`,
+      message: `delete by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 

@@ -49,7 +49,7 @@ export class RestaurantController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `post by ${user} (${role})`,
+      message: `post by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -119,7 +119,7 @@ export class RestaurantController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `get by ${user} (${role})`,
+      message: `get by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -212,7 +212,7 @@ export class RestaurantController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `get by id by ${user} (${role})`,
+      message: `get by id by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -273,7 +273,7 @@ export class RestaurantController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `patch by ${user} (${role})`,
+      message: `patch by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -316,7 +316,7 @@ export class RestaurantController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `delete by ${user} (${role})`,
+      message: `delete by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 

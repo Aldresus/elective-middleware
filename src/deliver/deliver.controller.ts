@@ -49,7 +49,7 @@ export class DeliverController {
 
     this.utils.addLog({
       service: 'DELIVER',
-      message: `post by ${user} (${role})`,
+      message: `post by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -89,7 +89,7 @@ export class DeliverController {
 
     this.utils.addLog({
       service: 'DELIVER',
-      message: `get by ${user} (${role})`,
+      message: `get by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -140,7 +140,7 @@ export class DeliverController {
 
     this.utils.addLog({
       service: 'DELIVER',
-      message: `patch by ${user} (${role})`,
+      message: `patch by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -165,7 +165,7 @@ export class DeliverController {
 
     this.utils.addLog({
       service: 'DELIVER',
-      message: `delete by ${user} (${role})`,
+      message: `delete by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 

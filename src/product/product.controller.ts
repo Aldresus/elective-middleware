@@ -47,7 +47,7 @@ export class ProductController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `post product by ${user} (${role})`,
+      message: `post product by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -78,7 +78,7 @@ export class ProductController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `get product by ${user} (${role})`,
+      message: `get product by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -108,7 +108,7 @@ export class ProductController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `get by id product by ${user} (${role})`,
+      message: `get by id product by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -133,7 +133,7 @@ export class ProductController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `patch product by ${user} (${role})`,
+      message: `patch product by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -152,7 +152,7 @@ export class ProductController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `delete product by ${user} (${role})`,
+      message: `delete product by ${user.id_user} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
