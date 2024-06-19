@@ -55,7 +55,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `post menu by ${user.id_user} (${role})`,
+      message: `post menu by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -103,7 +103,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `post menu category by ${user.id_user} (${role})`,
+      message: `post menu category by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -130,7 +130,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `get by id menu by ${user.id_user} (${role})`,
+      message: `get by id menu by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -179,7 +179,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `get menu by ${user.id_user} (${role})`,
+      message: `get menu by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -228,7 +228,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `patch menu category by ${user.id_user} (${role})`,
+      message: `patch menu category by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -252,7 +252,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `patch menu by ${user.id_user} (${role})`,
+      message: `patch menu by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -293,7 +293,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `delete menu by ${user.id_user} (${role})`,
+      message: `delete menu by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 
@@ -339,7 +339,7 @@ export class MenuController {
 
     this.utils.addLog({
       service: 'RESTAURANT',
-      message: `delete menu category by ${user.id_user} (${role})`,
+      message: `delete menu category by ${user.sub} (${role})`,
       level: 'INFO',
     } as CreateLogDto);
 

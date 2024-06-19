@@ -52,7 +52,7 @@ export class LogController {
 
     this.utils.addLog({
       service: 'LOG',
-      message: `get by ${user.id_user} (${role})`,
+      message: `get by ${user.sub}role})`,
       level: 'INFO',
     } as CreateLogDto);
 
