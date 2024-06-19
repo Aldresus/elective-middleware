@@ -43,10 +43,10 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
 
-    // REMOVE FOR PRODUCTION
-    request.role = 'ADMIN';
-    return true;
-    // REMOVE FOR PRODUCTION
+    // // REMOVE FOR PRODUCTION
+    // request.role = 'ADMIN';
+    // return true;
+    // // REMOVE FOR PRODUCTION
     if (!requiredRoles) {
       console.log('No required roles');
       return true;
