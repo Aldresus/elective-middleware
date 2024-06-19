@@ -14,14 +14,6 @@ async function bootstrap() {
     )
     .build();
 
-  // Enable CORS for dev atm
-  app.enableCors({
-    origin: 'http://localhost:5173',
-    allowedHeaders: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    exposedHeaders: '*',
-  });
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
