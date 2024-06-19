@@ -68,7 +68,7 @@ export class RestaurantController {
         })
       )[0];
 
-      if (restaurateur.id_resstaurant !== '000000000000000000000000') {
+      if (restaurateur.id_restaurant !== '000000000000000000000000') {
         throw new ForbiddenException(msg.restaurant_already_created);
       }
 
