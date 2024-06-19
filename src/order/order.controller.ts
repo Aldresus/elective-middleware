@@ -64,7 +64,6 @@ export class OrderController {
     if (role === Role.CLIENT) {
       if (user.sub === createOrderDto.id_user || !createOrderDto.id_user) {
         createOrderDto.id_user = user.sub;
-        createOrderDto.status = Status.CREATED;
 
         return this.orderService.create(createOrderDto);
       }
