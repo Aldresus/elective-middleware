@@ -6,6 +6,8 @@ import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { RestaurantEntity } from './entities/restaurant.entity';
 import { config } from 'config';
+import { CreateRestaurantCategoryDto } from './dto/create-category';
+import { AddMenuInCategoryDto, AddProductInCategoryDto } from './dto/update-category';
 
 @Injectable()
 export class RestaurantService {
@@ -18,6 +20,16 @@ export class RestaurantService {
       this.httpService.post<AxiosResponse<RestaurantEntity>>(
         this.baseUrl,
         createRestaurantDto,
+      ),
+    );
+    return response.data;
+  }
+
+  async createCategory(createRestaurantCategoryDto: CreateRestaurantCategoryDto): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.post<AxiosResponse<RestaurantEntity>>(
+        `${this.baseUrl}/restaurantCategory`,
+        createRestaurantCategoryDto,
       ),
     );
     return response.data;
@@ -62,10 +74,44 @@ export class RestaurantService {
     return response.data;
   }
 
+  async addProductCategory(
+    addProductInCategoryDto: AddProductInCategoryDto
+  ): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.patch<AxiosResponse<RestaurantEntity>>(
+        `${this.baseUrl}/addProductCategory`,
+        addProductInCategoryDto,
+      ),
+    );
+    return response.data;
+  }
+
+  async addMenuCategory(
+    addMenuInCategoryDto: AddMenuInCategoryDto
+  ): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.patch<AxiosResponse<RestaurantEntity>>(
+        `${this.baseUrl}/addMenuCategory`,
+        addMenuInCategoryDto,
+      ),
+    );
+    return response.data;
+  }
+  
+
   async remove(id_restaurant: string): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.delete<AxiosResponse<RestaurantEntity>>(
         `${this.baseUrl}/${id_restaurant}`,
+      ),
+    );
+    return response.data;
+  }
+
+  async removeCategory(id_restaurant_category: string): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.delete<AxiosResponse<RestaurantEntity>>(
+        `${this.baseUrl}/category/${id_restaurant_category}`,
       ),
     );
     return response.data;

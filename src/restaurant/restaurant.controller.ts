@@ -27,6 +27,9 @@ import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
 import { Utils } from 'src/utils/utils';
+import { RestaurantCategoryEntity } from './entities/category.entity';
+import { CreateRestaurantCategoryDto } from './dto/create-category';
+import { AddMenuInCategoryDto, AddProductInCategoryDto } from './dto/update-category';
 
 @Controller('api/restaurant')
 @ApiTags('restaurant')
@@ -75,6 +78,14 @@ export class RestaurantController {
 
       return newRestaurant;
     }
+  }
+  
+  @Post('restaurantCategory')
+  @ApiOperation({ summary: 'Create a restaurant category' })
+  @ApiCreatedResponse({ type: RestaurantCategoryEntity })
+  @ApiBody({ type: CreateRestaurantCategoryDto })
+  createCategory(@Body() createRestaurantCategoryDto: CreateRestaurantCategoryDto) {
+    return this.restaurantService.createCategory(createRestaurantCategoryDto);
   }
 
   @Get()
@@ -237,6 +248,23 @@ export class RestaurantController {
     throw new ForbiddenException(msg.missing_perms);
   }
 
+  @Patch('addProductCategory')
+  @ApiOperation({ summary: 'Update menu category with ID' })
+  @ApiCreatedResponse({ type: RestaurantCategoryEntity })
+  @ApiBody({ type: AddProductInCategoryDto })
+  addProductCategory(@Body() addProductInCategoryDto: AddProductInCategoryDto) {
+    return this.restaurantService.addProductCategory(addProductInCategoryDto);
+  }
+
+  @Patch('addMenuCategory')
+  @ApiOperation({ summary: 'Update menu category with ID' })
+  @ApiCreatedResponse({ type: RestaurantCategoryEntity })
+  @ApiBody({ type: AddMenuInCategoryDto })
+  addMenuCategory(@Body() addMenuInCategoryDto: AddMenuInCategoryDto) {
+    return this.restaurantService.addMenuCategory(addMenuInCategoryDto);
+  }
+
+
   @Patch(':id')
   @Roles(Role.ADMIN, Role.RESTAURATEUR, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Update restaurant with ID' })
@@ -307,5 +335,13 @@ export class RestaurantController {
       }
     }
     throw new ForbiddenException(msg.missing_perms);
+  }
+
+  @Delete('category/:id')
+  @ApiOperation({ summary: 'Delete category with ID' })
+  @ApiCreatedResponse({ type: RestaurantCategoryEntity })
+  @ApiParam({ name: 'id', type: String })
+  removeCategory(@Param('id') id_restaurant_category: string) {
+    return this.restaurantService.removeCategory(id_restaurant_category);
   }
 }
