@@ -28,16 +28,27 @@ import { UserLoginDto } from './dto/login-user.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
+import { Utils } from 'src/utils/utils';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Controller('api/user')
 @ApiTags('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly utils: Utils,
+  ) {}
 
   @ApiOperation({ summary: 'Login with credentials to get a token' })
   @Post('login')
   @ApiBody({ type: UserLoginDto })
   async login(@Body() signInDto: UserLoginDto) {
+    this.utils.addLog({
+      service: 'USER',
+      message: `Login from ${signInDto.email}`,
+      level: 'INFO',
+    } as CreateLogDto);
     return this.userService.login(signInDto.email, signInDto.password);
   }
 
@@ -45,7 +56,14 @@ export class UserController {
   @Post('register')
   @ApiBody({ type: CreateUserDto })
   async register(@Body() createUserDto: CreateUserDto) {
-    return this.userService.register(createUserDto);
+    this.utils.addLog({
+      service: 'USER',
+      message: `Register from ${createUserDto.email}`,
+      level: 'INFO',
+    } as CreateLogDto);
+    const { id_restaurant, role, id_users, ...filteredCreateUserDto } =
+      createUserDto;
+    return this.userService.register(filteredCreateUserDto);
   }
 
   @Get()
@@ -74,6 +92,12 @@ export class UserController {
   ) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'USER',
+      message: `get by ${user.sub}id_user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -127,6 +151,12 @@ export class UserController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'USER',
+      message: `patch by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -135,7 +165,6 @@ export class UserController {
       return this.userService.update(id, updateUserDto);
     }
     if (
-      role === Role.CLIENT ||
       role === Role.RESTAURATEUR ||
       role === Role.DELIVERYMAN ||
       role === Role.DEV
@@ -143,6 +172,25 @@ export class UserController {
       if (id === user.sub || !id) {
         const { role, id_restaurant, id_users, ...filteredUpdateUserDto } =
           updateUserDto;
+
+        const data = await this.userService.update(user.sub, updateUserDto);
+
+        const { password, createdAt, updatedAt, ...filteredData } = data;
+
+        return filteredData;
+      }
+    }
+    if (role === Role.CLIENT) {
+      if (id === user.sub || !id) {
+        const { id_restaurant, id_users, ...filteredUpdateUserDto } =
+          updateUserDto;
+
+        if (
+          updateUserDto.role !== 'RESTAURATEUR' ||
+          updateUserDto.role !== 'DELIVERYMAN'
+        ) {
+          throw new ForbiddenException(msg.missing_perms);
+        }
 
         const data = await this.userService.update(user.sub, updateUserDto);
 
@@ -170,6 +218,12 @@ export class UserController {
   async remove(@Param('id') id: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'USER',
+      message: `delete by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -217,6 +271,12 @@ export class UserController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'USER',
+      message: `update refer by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -263,6 +323,12 @@ export class UserController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'USER',
+      message: `delete refer by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -289,7 +355,7 @@ export class UserController {
     throw new ForbiddenException('Missing permissions');
   }
 
-  @Post('/:id/notifications')
+  @Post(':id/notifications')
   @Roles(Role.ADMIN, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Create a notification' })
   @ApiCreatedResponse({ type: UserEntity })
@@ -300,6 +366,15 @@ export class UserController {
     @Body() createNotificationDto: CreateNotificationDto,
     @Request() req,
   ) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'USER',
+      message: `post notification by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     const data = await this.userService.createUserNotifications(
       id,
       createNotificationDto,
@@ -308,7 +383,7 @@ export class UserController {
     return data;
   }
 
-  @Get('/:id/notifications')
+  @Get(':id/notifications')
   @Roles(
     Role.ADMIN,
     Role.CLIENT,
@@ -324,6 +399,12 @@ export class UserController {
   async findUserNotifications(@Param('id') id: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'USER',
+      message: `get notication by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -343,5 +424,24 @@ export class UserController {
       }
     }
     throw new ForbiddenException(msg.missing_perms);
+  }
+
+  @Patch(':id/notifications/:id_notification')
+  @ApiOperation({
+    summary: 'Update notification with user ID and notification ID',
+  })
+  @ApiCreatedResponse({ type: UserEntity })
+  @ApiBody({ type: UpdateNotificationDto })
+  @ApiBearerAuth('access-token')
+  updateUserNotifications(
+    @Param('id') id: string,
+    @Param('id_notification') id_notification: string,
+    @Body() updateNotificationDto: UpdateNotificationDto,
+  ) {
+    return this.userService.updateUserNotifications(
+      id,
+      id_notification,
+      updateNotificationDto,
+    );
   }
 }

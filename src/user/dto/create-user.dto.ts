@@ -17,13 +17,13 @@ export class CreateUserDto {
   phone: string;
 
   @ApiProperty()
-  role: string;
+  role?: string;
 
   @ApiProperty()
   password: string;
 
   @ApiProperty({ default: '000000000000000000000000' })
-  id_restaurant: string;
+  id_restaurant?: string;
 
   @ApiPropertyOptional({ default: [] })
   id_users?: Array<string>;

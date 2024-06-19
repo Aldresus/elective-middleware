@@ -8,6 +8,7 @@ import { ReferUserDto } from './dto/refer-user.dto';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UserEntity } from './entities/user.entity';
 import { config } from 'config';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Injectable()
 export class UserService {
@@ -141,6 +142,20 @@ export class UserService {
     const response = await lastValueFrom(
       this.httpService.get<AxiosResponse<UserEntity[]>>(
         `${this.baseUrl}/${id}/notifications`,
+      ),
+    );
+    return response.data;
+  }
+
+  async updateUserNotifications(
+    id_user: string,
+    id_notification: string,
+    updateNotificationDto: UpdateNotificationDto,
+  ) {
+    const response = await lastValueFrom(
+      this.httpService.patch<AxiosResponse<UserEntity>>(
+        `${this.baseUrl}/${id_user}/notifications/${id_notification}`,
+        updateNotificationDto,
       ),
     );
     return response.data;

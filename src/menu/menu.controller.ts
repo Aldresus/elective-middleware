@@ -24,12 +24,16 @@ import {
 } from '@nestjs/swagger';
 import { MenuEntity } from './entities/menu.entity';
 import { CategoryEntity } from './entities/category.entity';
-import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
+import {
+  UpdateCategoryDto,
+  UpdateProductCategoryDto,
+} from './dto/update-category';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { Utils } from 'src/utils/utils';
 import { msg } from 'config';
 import { CreateCategoryDto } from './dto/create-category';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/menu')
 @ApiTags('menu')
@@ -48,6 +52,12 @@ export class MenuController {
   async create(@Body() createMenuDto: CreateMenuDto, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `post menu by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -74,14 +84,6 @@ export class MenuController {
   }
 
   @Post('category')
-  @ApiOperation({ summary: 'Create a category' })
-  @ApiCreatedResponse({ type: CategoryEntity })
-  @ApiBody({ type: CreateCategoryDto })
-  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.menuService.createCategory(createCategoryDto);
-  }
-
-  @Get(':id')
   @Roles(
     Role.ADMIN,
     Role.RESTAURATEUR,
@@ -91,15 +93,50 @@ export class MenuController {
     Role.DEV,
     Role.DELIVERYMAN,
   )
+  @ApiOperation({ summary: 'Create a category' })
+  @ApiCreatedResponse({ type: CategoryEntity })
+  @ApiBody({ type: CreateCategoryDto })
+  @ApiBearerAuth('access-token')
+  createCategory(@Body() createCategoryDto: CreateCategoryDto, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `post menu category by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
+    return this.menuService.createCategory(createCategoryDto);
+  }
+
+  @Get(':id')
+  /**@Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )*/
   @ApiOperation({ summary: 'Get menu with ID' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiParam({ name: 'id', type: String })
   @ApiBearerAuth('access-token')
   async getById(@Param('id') id_menu: string, @Request() req) {
-    const user = req.user;
+    /**const user = req.user;
     const role = req.role;
 
-    if (
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get by id menu by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);*/
+
+    return this.menuService.getById(id_menu);
+
+    /**if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
@@ -121,7 +158,7 @@ export class MenuController {
       return this.menuService.getById(id_menu);
     }
 
-    return this.menuService.getById(id_menu);
+    return this.menuService.getById(id_menu);*/
   }
 
   @Get()
@@ -141,6 +178,12 @@ export class MenuController {
   async findAll(@Query('id_restaurant') idRestaurant: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get menu by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -165,10 +208,32 @@ export class MenuController {
   }
 
   @Patch('productCategory')
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Update menu category with ID' })
   @ApiCreatedResponse({ type: CategoryEntity })
   @ApiBody({ type: UpdateProductCategoryDto })
-  updateCategory(@Body() updateProductCategoryDto: UpdateProductCategoryDto) {
+  @ApiBearerAuth('access-token')
+  updateCategory(
+    @Body() updateProductCategoryDto: UpdateProductCategoryDto,
+    @Request() req,
+  ) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `patch menu category by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     return this.menuService.updateCategory(updateProductCategoryDto);
   }
 
@@ -186,6 +251,12 @@ export class MenuController {
   ) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `patch menu by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -222,6 +293,12 @@ export class MenuController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `delete menu by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -245,10 +322,29 @@ export class MenuController {
   }
 
   @Delete('category/:id')
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Delete category with ID' })
   @ApiCreatedResponse({ type: CategoryEntity })
   @ApiParam({ name: 'id', type: String })
-  removeCategory(@Param('id') id_category: string) {
+  @ApiBearerAuth('access-token')
+  removeCategory(@Param('id') id_category: string, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `delete menu category by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     return this.menuService.removeCategory(id_category);
   }
 }

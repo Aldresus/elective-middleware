@@ -12,7 +12,9 @@ pipeline {
                 script {
                     sh "echo deleting existing image and container"
                     try {sh "rm .env"} catch (Exception e) {echo "No .env to remove"}
-                    try {sh "docker rm middleware-service -f"} catch (Exception e) {echo "No container to remove"}
+                    try {sh "docker rm middleware-service1 -f"} catch (Exception e) {echo "No container 1 to remove"}
+                    try {sh "docker rm middleware-service2 -f"} catch (Exception e) {echo "No container 2 to remove"}
+                    try {sh "docker rmi middleware-service"} catch (Exception e) {echo "No existing image to remove"}
                     try {sh "docker rmi middleware-service"} catch (Exception e) {echo "No existing image to remove"}
                 }
             }
@@ -45,7 +47,8 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    sh "docker run -d --name middleware-service -p 9014:3000 --restart unless-stopped middleware-service"
+                    sh "docker run -d --name middleware-service1 --network elective_network --restart unless-stopped middleware-service"
+                    sh "docker run -d --name middleware-service2 --network elective_network --restart unless-stopped middleware-service"
                 }
             }
             post {

@@ -10,6 +10,8 @@ import { ROLES_KEY } from './role.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { msg } from 'config';
+import { Utils } from 'src/utils/utils';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -17,6 +19,7 @@ export class RolesGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private utils: Utils,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,15 +28,25 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
     console.log('URL:', context.switchToHttp().getRequest().url);
+    console.log('URL:', context.switchToHttp().getRequest().method);
     console.log('RequiredRoles:', requiredRoles);
+
+    const url = context.switchToHttp().getRequest().url;
+    const method = context.switchToHttp().getRequest().method;
+
+    this.utils.addLog({
+      service: 'MIDDLEWARE',
+      message: `[${method}] ${url}`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
 
-    // REMOVE FOR PRODUCTION
-    request.role = 'ADMIN';
-    return true;
-    // REMOVE FOR PRODUCTION
+    // // REMOVE FOR PRODUCTION
+    // request.role = 'ADMIN';
+    // return true;
+    // // REMOVE FOR PRODUCTION
     if (!requiredRoles) {
       console.log('No required roles');
       return true;

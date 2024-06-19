@@ -30,6 +30,7 @@ import { Utils } from 'src/utils/utils';
 import { RestaurantCategoryEntity } from './entities/category.entity';
 import { CreateRestaurantCategoryDto } from './dto/create-category';
 import { AddMenuInCategoryDto, AddProductInCategoryDto } from './dto/update-category';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/restaurant')
 @ApiTags('restaurant')
@@ -49,6 +50,12 @@ export class RestaurantController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `post by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -64,7 +71,7 @@ export class RestaurantController {
         })
       )[0];
 
-      if (restaurateur.id_resstaurant !== '000000000000000000000000') {
+      if (restaurateur.id_restaurant !== '000000000000000000000000') {
         throw new ForbiddenException(msg.restaurant_already_created);
       }
 
@@ -89,7 +96,7 @@ export class RestaurantController {
   }
 
   @Get()
-  @Roles(
+  /**@Roles(
     Role.ADMIN,
     Role.CLIENT,
     Role.RESTAURATEUR,
@@ -97,7 +104,7 @@ export class RestaurantController {
     Role.COMMERCIAL,
     Role.DEV,
     Role.TECHNICIAN,
-  )
+  )*/
   @ApiOperation({ summary: 'Get restaurants with optional filters' })
   @ApiCreatedResponse({ type: RestaurantEntity, isArray: true })
   @ApiQuery({ name: 'name', required: false, type: String })
@@ -118,12 +125,28 @@ export class RestaurantController {
     @Query('rating_lt') ratingLT: number,
     @Request() req,
   ) {
-    const user = req.user;
+    /**const user = req.user;
     const role = req.role;
 
-    console.log('Role:', role);
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get by ${user.sub}`,
+      level: 'INFO',
+    } as CreateLogDto);
 
-    if (
+    console.log('Role:', role);*/
+
+    return this.restaurantService.findMany({
+      name,
+      city,
+      price_range,
+      category,
+      rating_e: Number(ratingE) || undefined,
+      rating_gt: Number(ratingGT) || undefined,
+      rating_lt: Number(ratingLT) || undefined,
+    });
+
+    /**if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
@@ -187,11 +210,11 @@ export class RestaurantController {
 
       return filteredData;
     }
-    throw new ForbiddenException(msg.missing_perms);
+    throw new ForbiddenException(msg.missing_perms);*/
   }
 
   @Get(':id')
-  @Roles(
+  /**@Roles(
     Role.ADMIN,
     Role.CLIENT,
     Role.RESTAURATEUR,
@@ -199,18 +222,26 @@ export class RestaurantController {
     Role.COMMERCIAL,
     Role.DEV,
     Role.TECHNICIAN,
-  )
+  )*/
   @ApiOperation({ summary: 'Get restaurant with ID' })
   @ApiCreatedResponse({ type: RestaurantEntity })
   @ApiParam({ name: 'id', type: String })
   @ApiBearerAuth('access-token')
   async findById(@Param('id') id_restaurant: string, @Request() req) {
-    const user = req.user;
+    /**const user = req.user;
     const role = req.role;
 
-    console.log('Role:', role);
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get by id by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
-    if (
+    console.log('Role:', role);*/
+
+    return this.restaurantService.findById(id_restaurant);
+
+    /**if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
@@ -245,7 +276,7 @@ export class RestaurantController {
       const { siret, createdAt, updatedAt, ...rest } = data;
       return rest;
     }
-    throw new ForbiddenException(msg.missing_perms);
+    throw new ForbiddenException(msg.missing_perms);*/
   }
 
   @Patch('addProductCategory')
@@ -279,6 +310,12 @@ export class RestaurantController {
   ) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `patch by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -316,6 +353,12 @@ export class RestaurantController {
   async remove(@Param('id') id_restaurant: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `delete by ${user.sub} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
