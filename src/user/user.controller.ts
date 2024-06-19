@@ -30,6 +30,7 @@ import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
 import { Utils } from 'src/utils/utils';
 import { CreateLogDto } from 'src/log/dto/create-log.dto';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Controller('api/user')
 @ApiTags('user')
@@ -334,7 +335,7 @@ export class UserController {
     throw new ForbiddenException('Missing permissions');
   }
 
-  @Post('/:id/notifications')
+  @Post(':id/notifications')
   @Roles(Role.ADMIN, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Create a notification' })
   @ApiCreatedResponse({ type: UserEntity })
@@ -362,7 +363,7 @@ export class UserController {
     return data;
   }
 
-  @Get('/:id/notifications')
+  @Get(':id/notifications')
   @Roles(
     Role.ADMIN,
     Role.CLIENT,
@@ -403,5 +404,24 @@ export class UserController {
       }
     }
     throw new ForbiddenException(msg.missing_perms);
+  }
+
+  @Patch(':id/notifications/:id_notification')
+  @ApiOperation({
+    summary: 'Update notification with user ID and notification ID',
+  })
+  @ApiCreatedResponse({ type: UserEntity })
+  @ApiBody({ type: UpdateNotificationDto })
+  @ApiBearerAuth('access-token')
+  updateUserNotifications(
+    @Param('id') id: string,
+    @Param('id_notification') id_notification: string,
+    @Body() updateNotificationDto: UpdateNotificationDto,
+  ) {
+    return this.userService.updateUserNotifications(
+      id,
+      id_notification,
+      updateNotificationDto,
+    );
   }
 }
