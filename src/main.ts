@@ -16,7 +16,7 @@ async function bootstrap() {
 
   // Enable CORS for dev atm
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: '*', //'http://localhost:5173',
     allowedHeaders: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     exposedHeaders: '*',
