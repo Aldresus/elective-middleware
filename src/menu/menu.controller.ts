@@ -111,7 +111,7 @@ export class MenuController {
   }
 
   @Get(':id')
-  @Roles(
+  /**@Roles(
     Role.ADMIN,
     Role.RESTAURATEUR,
     Role.COMMERCIAL,
@@ -119,7 +119,7 @@ export class MenuController {
     Role.CLIENT,
     Role.DEV,
     Role.DELIVERYMAN,
-  )
+  )*/
   @ApiOperation({ summary: 'Get menu with ID' })
   @ApiCreatedResponse({ type: MenuEntity })
   @ApiParam({ name: 'id', type: String })
@@ -134,7 +134,9 @@ export class MenuController {
       level: 'INFO',
     } as CreateLogDto);
 
-    if (
+    return this.menuService.getById(id_menu);
+
+    /**if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
@@ -156,7 +158,7 @@ export class MenuController {
       return this.menuService.getById(id_menu);
     }
 
-    return this.menuService.getById(id_menu);
+    return this.menuService.getById(id_menu);*/
   }
 
   @Get()

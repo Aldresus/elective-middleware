@@ -85,7 +85,7 @@ export class RestaurantController {
   }
 
   @Get()
-  @Roles(
+  /**@Roles(
     Role.ADMIN,
     Role.CLIENT,
     Role.RESTAURATEUR,
@@ -93,7 +93,7 @@ export class RestaurantController {
     Role.COMMERCIAL,
     Role.DEV,
     Role.TECHNICIAN,
-  )
+  )*/
   @ApiOperation({ summary: 'Get restaurants with optional filters' })
   @ApiCreatedResponse({ type: RestaurantEntity, isArray: true })
   @ApiQuery({ name: 'name', required: false, type: String })
@@ -125,7 +125,17 @@ export class RestaurantController {
 
     console.log('Role:', role);
 
-    if (
+    return this.restaurantService.findMany({
+      name,
+      city,
+      price_range,
+      category,
+      rating_e: Number(ratingE) || undefined,
+      rating_gt: Number(ratingGT) || undefined,
+      rating_lt: Number(ratingLT) || undefined,
+    });
+
+    /**if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
@@ -189,11 +199,11 @@ export class RestaurantController {
 
       return filteredData;
     }
-    throw new ForbiddenException(msg.missing_perms);
+    throw new ForbiddenException(msg.missing_perms);*/
   }
 
   @Get(':id')
-  @Roles(
+  /**@Roles(
     Role.ADMIN,
     Role.CLIENT,
     Role.RESTAURATEUR,
@@ -201,7 +211,7 @@ export class RestaurantController {
     Role.COMMERCIAL,
     Role.DEV,
     Role.TECHNICIAN,
-  )
+  )*/
   @ApiOperation({ summary: 'Get restaurant with ID' })
   @ApiCreatedResponse({ type: RestaurantEntity })
   @ApiParam({ name: 'id', type: String })
@@ -218,7 +228,9 @@ export class RestaurantController {
 
     console.log('Role:', role);
 
-    if (
+    return this.restaurantService.findById(id_restaurant);
+
+    /**if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
@@ -253,7 +265,7 @@ export class RestaurantController {
       const { siret, createdAt, updatedAt, ...rest } = data;
       return rest;
     }
-    throw new ForbiddenException(msg.missing_perms);
+    throw new ForbiddenException(msg.missing_perms);*/
   }
 
   @Patch(':id')
