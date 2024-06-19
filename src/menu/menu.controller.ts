@@ -84,10 +84,29 @@ export class MenuController {
   }
 
   @Post('category')
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Create a category' })
   @ApiCreatedResponse({ type: CategoryEntity })
   @ApiBody({ type: CreateCategoryDto })
-  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+  @ApiBearerAuth('access-token')
+  createCategory(@Body() createCategoryDto: CreateCategoryDto, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `post menu category by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     return this.menuService.createCategory(createCategoryDto);
   }
 
@@ -187,10 +206,32 @@ export class MenuController {
   }
 
   @Patch('productCategory')
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Update menu category with ID' })
   @ApiCreatedResponse({ type: CategoryEntity })
   @ApiBody({ type: UpdateProductCategoryDto })
-  updateCategory(@Body() updateProductCategoryDto: UpdateProductCategoryDto) {
+  @ApiBearerAuth('access-token')
+  updateCategory(
+    @Body() updateProductCategoryDto: UpdateProductCategoryDto,
+    @Request() req,
+  ) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `patch menu category by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     return this.menuService.updateCategory(updateProductCategoryDto);
   }
 
@@ -279,10 +320,29 @@ export class MenuController {
   }
 
   @Delete('category/:id')
+  @Roles(
+    Role.ADMIN,
+    Role.RESTAURATEUR,
+    Role.COMMERCIAL,
+    Role.TECHNICIAN,
+    Role.CLIENT,
+    Role.DEV,
+    Role.DELIVERYMAN,
+  )
   @ApiOperation({ summary: 'Delete category with ID' })
   @ApiCreatedResponse({ type: CategoryEntity })
   @ApiParam({ name: 'id', type: String })
-  removeCategory(@Param('id') id_category: string) {
+  @ApiBearerAuth('access-token')
+  removeCategory(@Param('id') id_category: string, @Request() req) {
+    const user = req.user;
+    const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `delete menu category by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     return this.menuService.removeCategory(id_category);
   }
 }
