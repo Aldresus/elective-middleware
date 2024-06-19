@@ -186,8 +186,8 @@ export class UserController {
           updateUserDto;
 
         if (
-          updateUserDto.role !== 'RESTAURATEUR' ||
-          updateUserDto.role !== 'DELIVERYMAN'
+          updateUserDto.role !== Role.RESTAURATEUR ||
+          updateUserDto.role !== Role.DELIVERYMAN
         ) {
           throw new ForbiddenException(msg.missing_perms);
         }
