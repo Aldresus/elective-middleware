@@ -125,14 +125,14 @@ export class MenuController {
   @ApiParam({ name: 'id', type: String })
   @ApiBearerAuth('access-token')
   async getById(@Param('id') id_menu: string, @Request() req) {
-    const user = req.user;
+    /**const user = req.user;
     const role = req.role;
 
     this.utils.addLog({
       service: 'RESTAURANT',
       message: `get by id menu by ${user.sub} (${role})`,
       level: 'INFO',
-    } as CreateLogDto);
+    } as CreateLogDto);*/
 
     return this.menuService.getById(id_menu);
 

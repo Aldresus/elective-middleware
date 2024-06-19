@@ -112,9 +112,9 @@ export class RestaurantController {
     @Query('rating_e') ratingE: number,
     @Query('rating_gt') ratingGT: number,
     @Query('rating_lt') ratingLT: number,
-    @Request() req,
+    /**@Request() req,*/
   ) {
-    const user = req.user;
+    /**const user = req.user;
     const role = req.role;
 
     this.utils.addLog({
@@ -123,7 +123,7 @@ export class RestaurantController {
       level: 'INFO',
     } as CreateLogDto);
 
-    console.log('Role:', role);
+    console.log('Role:', role);*/
 
     return this.restaurantService.findMany({
       name,
@@ -216,8 +216,8 @@ export class RestaurantController {
   @ApiCreatedResponse({ type: RestaurantEntity })
   @ApiParam({ name: 'id', type: String })
   @ApiBearerAuth('access-token')
-  async findById(@Param('id') id_restaurant: string, @Request() req) {
-    const user = req.user;
+  async findById(@Param('id') id_restaurant: string /**@Request() req*/) {
+    /**const user = req.user;
     const role = req.role;
 
     this.utils.addLog({
@@ -226,7 +226,7 @@ export class RestaurantController {
       level: 'INFO',
     } as CreateLogDto);
 
-    console.log('Role:', role);
+    console.log('Role:', role);*/
 
     return this.restaurantService.findById(id_restaurant);
 
