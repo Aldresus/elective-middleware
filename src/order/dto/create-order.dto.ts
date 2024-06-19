@@ -7,9 +7,6 @@ export class CreateOrderDto {
   order_date: Date;
 
   @ApiProperty()
-  status: string;
-
-  @ApiProperty()
   price: number;
 
   @ApiProperty()
