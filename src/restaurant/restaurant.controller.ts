@@ -27,6 +27,7 @@ import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
 import { Utils } from 'src/utils/utils';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/restaurant')
 @ApiTags('restaurant')
@@ -45,6 +46,12 @@ export class RestaurantController {
   async create(@Body() createRestaurantDto, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `post by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -109,6 +116,12 @@ export class RestaurantController {
   ) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     console.log('Role:', role);
 
@@ -197,6 +210,12 @@ export class RestaurantController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get by id by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     console.log('Role:', role);
 
     if (
@@ -252,6 +271,12 @@ export class RestaurantController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `patch by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -288,6 +313,12 @@ export class RestaurantController {
   async remove(@Param('id') id_restaurant: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `delete by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||

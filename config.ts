@@ -7,6 +7,7 @@ export const config = {
   baseUrl_deliver_api: 'http://delivery.lihoco.fr/api/deliver',
   baseUrl_order_api: 'http://order.lihoco.fr/api/order',
   baseUrl_user_api: 'http://user.lihoco.fr/api/user',
+  baseUrl_log_api: 'http://log.lihoco.fr/api/log',
 };
 
 export const msg = {
