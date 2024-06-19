@@ -26,16 +26,11 @@ import { UpdateDeliverDto } from './dto/update-deliver.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
-import { Utils } from 'src/utils/utils';
-import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/deliver')
 @ApiTags('deliver')
 export class DeliverController {
-  constructor(
-    private readonly deliverService: DeliverService,
-    private readonly utils: Utils,
-  ) {}
+  constructor(private readonly deliverService: DeliverService) {}
 
   @Post()
   @Roles(Role.ADMIN, Role.COMMERCIAL, Role.TECHNICIAN)
@@ -46,12 +41,6 @@ export class DeliverController {
   create(@Body() createDeliverDto, @Request() req) {
     const user = req.user;
     const role = req.role;
-
-    this.utils.addLog({
-      service: 'DELIVER',
-      message: `post by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
 
     console.log('user', user);
     console.log('role', role);
@@ -86,12 +75,6 @@ export class DeliverController {
   ) {
     const user = req.user;
     const role = req.role;
-
-    this.utils.addLog({
-      service: 'DELIVER',
-      message: `get by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
 
     console.log('user', user);
     console.log('role', role);
@@ -138,12 +121,6 @@ export class DeliverController {
     const user = req.user;
     const role = req.role;
 
-    this.utils.addLog({
-      service: 'DELIVER',
-      message: `patch by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
-
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -162,12 +139,6 @@ export class DeliverController {
   remove(@Param('id') id_deliver: string, @Request() req) {
     const user = req.user;
     const role = req.role;
-
-    this.utils.addLog({
-      service: 'DELIVER',
-      message: `delete by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||

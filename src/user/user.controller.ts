@@ -28,26 +28,16 @@ import { UserLoginDto } from './dto/login-user.dto';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
-import { Utils } from 'src/utils/utils';
-import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/user')
 @ApiTags('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly utils: Utils,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Login with credentials to get a token' })
   @Post('login')
   @ApiBody({ type: UserLoginDto })
   async login(@Body() signInDto: UserLoginDto) {
-    this.utils.addLog({
-      service: 'USER',
-      message: `Login from ${signInDto.email}`,
-      level: 'INFO',
-    } as CreateLogDto);
     return this.userService.login(signInDto.email, signInDto.password);
   }
 
@@ -55,11 +45,6 @@ export class UserController {
   @Post('register')
   @ApiBody({ type: CreateUserDto })
   async register(@Body() createUserDto: CreateUserDto) {
-    this.utils.addLog({
-      service: 'USER',
-      message: `Register from ${createUserDto.email}`,
-      level: 'INFO',
-    } as CreateLogDto);
     return this.userService.register(createUserDto);
   }
 
@@ -89,12 +74,6 @@ export class UserController {
   ) {
     const user = req.user;
     const role = req.role;
-
-    this.utils.addLog({
-      service: 'USER',
-      message: `get by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -148,12 +127,6 @@ export class UserController {
     const user = req.user;
     const role = req.role;
 
-    this.utils.addLog({
-      service: 'USER',
-      message: `patch by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
-
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -197,12 +170,6 @@ export class UserController {
   async remove(@Param('id') id: string, @Request() req) {
     const user = req.user;
     const role = req.role;
-
-    this.utils.addLog({
-      service: 'USER',
-      message: `delete by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -250,12 +217,6 @@ export class UserController {
     const user = req.user;
     const role = req.role;
 
-    this.utils.addLog({
-      service: 'USER',
-      message: `update refer by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
-
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -302,12 +263,6 @@ export class UserController {
     const user = req.user;
     const role = req.role;
 
-    this.utils.addLog({
-      service: 'USER',
-      message: `delete refer by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
-
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -345,15 +300,6 @@ export class UserController {
     @Body() createNotificationDto: CreateNotificationDto,
     @Request() req,
   ) {
-    const user = req.user;
-    const role = req.role;
-
-    this.utils.addLog({
-      service: 'USER',
-      message: `post notification by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
-
     const data = await this.userService.createUserNotifications(
       id,
       createNotificationDto,
@@ -378,12 +324,6 @@ export class UserController {
   async findUserNotifications(@Param('id') id: string, @Request() req) {
     const user = req.user;
     const role = req.role;
-
-    this.utils.addLog({
-      service: 'USER',
-      message: `get notication by ${user} (${role})`,
-      level: 'INFO',
-    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||

@@ -4,9 +4,6 @@ import { AxiosResponse } from 'axios';
 import { config } from 'config';
 import { lastValueFrom } from 'rxjs';
 import { DeliverEntity } from 'src/deliver/entities/deliver.entity';
-import { CreateLogDto } from 'src/log/dto/create-log.dto';
-import { LogEntity } from 'src/log/entities/log.entity';
-import { LogService } from 'src/log/log.service';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 import { UserEntity } from 'src/user/entities/user.entity';
 
@@ -16,11 +13,7 @@ export class Utils {
   private readonly baseUrl_restaurant_api: string =
     config.baseUrl_restaurant_api;
   private readonly baseUrl_deliver_api: string = config.baseUrl_deliver_api;
-  private readonly baseUrl_log_api: string = config.baseUrl_log_api;
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly logService: LogService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async getUserByID(query: { id?: string }): Promise<any> {
     try {
@@ -103,13 +96,6 @@ export class Utils {
           params: query,
         },
       ),
-    );
-    return response.data;
-  }
-
-  async addLog(createLogDto: CreateLogDto): Promise<any> {
-    const response = await lastValueFrom(
-      this.httpService.post<LogEntity>(this.baseUrl_log_api, createLogDto),
     );
     return response.data;
   }

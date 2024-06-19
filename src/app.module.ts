@@ -6,8 +6,6 @@ import { OrderModule } from './order/order.module';
 import { UserModule } from './user/user.module';
 import { DeliverModule } from './deliver/deliver.module';
 import { ConfigModule } from '@nestjs/config';
-import { LogModule } from './log/log.module';
-import { Utils } from './utils/utils';
 
 @Module({
   imports: [
@@ -20,7 +18,6 @@ import { Utils } from './utils/utils';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    LogModule,
   ],
   controllers: [],
   providers: [],
