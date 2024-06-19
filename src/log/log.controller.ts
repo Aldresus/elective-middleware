@@ -13,6 +13,7 @@ import { LogService } from './log.service';
 import { CreateLogDto } from './dto/create-log.dto';
 import { UpdateLogDto } from './dto/update-log.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOperation,
@@ -39,6 +40,7 @@ export class LogController {
   @ApiQuery({ name: 'id_log', required: false, type: String })
   @ApiQuery({ name: 'service', required: false, type: String })
   @ApiQuery({ name: 'level', required: false, type: String })
+  @ApiBearerAuth('access-token')
   findAll(
     @Query('id_log') idLog: string,
     @Query('service') service: string,
