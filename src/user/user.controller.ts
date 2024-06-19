@@ -61,7 +61,9 @@ export class UserController {
       message: `Register from ${createUserDto.email}`,
       level: 'INFO',
     } as CreateLogDto);
-    return this.userService.register(createUserDto);
+    const { id_restaurant, role, id_users, ...filteredCreateUserDto } =
+      createUserDto;
+    return this.userService.register(filteredCreateUserDto);
   }
 
   @Get()
@@ -163,7 +165,6 @@ export class UserController {
       return this.userService.update(id, updateUserDto);
     }
     if (
-      role === Role.CLIENT ||
       role === Role.RESTAURATEUR ||
       role === Role.DELIVERYMAN ||
       role === Role.DEV
@@ -171,6 +172,25 @@ export class UserController {
       if (id === user.sub || !id) {
         const { role, id_restaurant, id_users, ...filteredUpdateUserDto } =
           updateUserDto;
+
+        const data = await this.userService.update(user.sub, updateUserDto);
+
+        const { password, createdAt, updatedAt, ...filteredData } = data;
+
+        return filteredData;
+      }
+    }
+    if (role === Role.CLIENT) {
+      if (id === user.sub || !id) {
+        const { id_restaurant, id_users, ...filteredUpdateUserDto } =
+          updateUserDto;
+
+        if (
+          updateUserDto.role !== 'RESTAURATEUR' ||
+          updateUserDto.role !== 'DELIVERYMAN'
+        ) {
+          throw new ForbiddenException(msg.missing_perms);
+        }
 
         const data = await this.userService.update(user.sub, updateUserDto);
 
