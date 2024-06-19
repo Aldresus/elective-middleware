@@ -112,7 +112,7 @@ export class RestaurantController {
     @Query('rating_e') ratingE: number,
     @Query('rating_gt') ratingGT: number,
     @Query('rating_lt') ratingLT: number,
-    /**@Request() req,*/
+    @Request() req,
   ) {
     /**const user = req.user;
     const role = req.role;
@@ -216,7 +216,7 @@ export class RestaurantController {
   @ApiCreatedResponse({ type: RestaurantEntity })
   @ApiParam({ name: 'id', type: String })
   @ApiBearerAuth('access-token')
-  async findById(@Param('id') id_restaurant: string /**@Request() req*/) {
+  async findById(@Param('id') id_restaurant: string, @Request() req) {
     /**const user = req.user;
     const role = req.role;
 
