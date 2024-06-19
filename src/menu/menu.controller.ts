@@ -24,12 +24,16 @@ import {
 } from '@nestjs/swagger';
 import { MenuEntity } from './entities/menu.entity';
 import { CategoryEntity } from './entities/category.entity';
-import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
+import {
+  UpdateCategoryDto,
+  UpdateProductCategoryDto,
+} from './dto/update-category';
 import { Roles } from 'src/role/role.decorator';
 import { Role } from 'src/role/role.enum';
 import { Utils } from 'src/utils/utils';
 import { msg } from 'config';
 import { CreateCategoryDto } from './dto/create-category';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/menu')
 @ApiTags('menu')
@@ -48,6 +52,12 @@ export class MenuController {
   async create(@Body() createMenuDto: CreateMenuDto, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `post menu by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -99,6 +109,12 @@ export class MenuController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get by id menu by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -141,6 +157,12 @@ export class MenuController {
   async findAll(@Query('id_restaurant') idRestaurant: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `get menu by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -187,6 +209,12 @@ export class MenuController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `patch menu by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -221,6 +249,12 @@ export class MenuController {
   async remove(@Param('id') id_menu: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'RESTAURANT',
+      message: `delete menu by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||

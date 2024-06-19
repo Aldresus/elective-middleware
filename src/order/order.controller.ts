@@ -28,6 +28,7 @@ import { Role } from 'src/role/role.enum';
 import { msg } from 'config';
 import { Status } from 'src/order/order.status.enum';
 import { Utils } from 'src/utils/utils';
+import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/order')
 @ApiTags('order')
@@ -46,6 +47,12 @@ export class OrderController {
   create(@Body() createOrderDto: CreateOrderDto, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'ORDER',
+      message: `post by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -81,6 +88,12 @@ export class OrderController {
   async findById(@Param('id') id_order: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'ORDER',
+      message: `get by id by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -150,6 +163,12 @@ export class OrderController {
   ) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'ORDER',
+      message: `get by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
@@ -259,6 +278,12 @@ export class OrderController {
     const user = req.user;
     const role = req.role;
 
+    this.utils.addLog({
+      service: 'ORDER',
+      message: `patch by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
+
     if (
       role === Role.ADMIN ||
       role === Role.TECHNICIAN ||
@@ -308,6 +333,12 @@ export class OrderController {
   async remove(@Param('id') id_order: string, @Request() req) {
     const user = req.user;
     const role = req.role;
+
+    this.utils.addLog({
+      service: 'ORDER',
+      message: `delete by ${user} (${role})`,
+      level: 'INFO',
+    } as CreateLogDto);
 
     if (
       role === Role.ADMIN ||
