@@ -185,10 +185,7 @@ export class UserController {
         const { id_restaurant, id_users, ...filteredUpdateUserDto } =
           updateUserDto;
 
-        if (
-          filteredUpdateUserDto.role ||
-          filteredUpdateUserDto.role !== Role.CLIENT
-        ) {
+        if (filteredUpdateUserDto.role) {
           if (
             filteredUpdateUserDto.role !== Role.RESTAURATEUR &&
             filteredUpdateUserDto.role !== Role.DELIVERYMAN
