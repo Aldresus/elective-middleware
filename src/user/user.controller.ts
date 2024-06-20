@@ -181,18 +181,14 @@ export class UserController {
       }
     }
     if (role === Role.CLIENT) {
-      console.log('user.sub', user.sub, 'id', id);
       if (id === user.sub || !id) {
         const { id_restaurant, id_users, ...filteredUpdateUserDto } =
           updateUserDto;
-
-        console.log('filteredUpdateUserDto', filteredUpdateUserDto);
 
         if (
           filteredUpdateUserDto.role !== Role.RESTAURATEUR &&
           filteredUpdateUserDto.role !== Role.DELIVERYMAN
         ) {
-          console.log('non');
           throw new ForbiddenException(msg.missing_perms);
         }
 

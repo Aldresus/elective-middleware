@@ -23,6 +23,8 @@ export class LogService {
     id_log?: string;
     service?: string;
     level?: string;
+    page?: number;
+    limit?: number;
   }): Promise<LogEntity[]> {
     const response = await lastValueFrom(
       this.httpService.get<LogEntity[]>(this.baseUrl, {

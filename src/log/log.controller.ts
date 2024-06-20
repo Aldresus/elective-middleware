@@ -40,11 +40,15 @@ export class LogController {
   @ApiQuery({ name: 'id_log', required: false, type: String })
   @ApiQuery({ name: 'service', required: false, type: String })
   @ApiQuery({ name: 'level', required: false, type: String })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   @ApiBearerAuth('access-token')
   findAll(
     @Query('id_log') idLog: string,
     @Query('service') service: string,
     @Query('level') level: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
     @Request() req,
   ) {
     const user = req.user;
@@ -60,6 +64,8 @@ export class LogController {
       id_log: idLog,
       service: service,
       level: level,
+      page: page,
+      limit: limit,
     });
   }
 }
