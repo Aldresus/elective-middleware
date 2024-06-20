@@ -204,7 +204,7 @@ export class MenuController {
 
       // const { createdAt, updatedAt, ...rest } = data;
       const rest = data.map((item) => {
-        const { createdAt, updatedAt, ...rest } = item as MenuEntity;
+        const { createdAt, updatedAt, ...rest } = item;
         return rest;
       });
 
