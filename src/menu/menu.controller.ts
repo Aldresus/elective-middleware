@@ -198,21 +198,7 @@ export class MenuController {
       role === Role.DEV ||
       role === Role.DELIVERYMAN
     ) {
-      const { data } = await this.menuService.findMany(idRestaurant);
-
-      console.log(data);
-
-      // const { createdAt, updatedAt, ...rest } = data;
-      const rest = data.map((item) => {
-        console.log('items ', item);
-
-        const { createdAt, updatedAt, ...tempRest } = item;
-        return tempRest;
-      });
-
-      console.log(rest);
-
-      return rest;
+      return this.menuService.findMany(idRestaurant);
     }
     throw new ForbiddenException(msg.missing_perms);
   }
