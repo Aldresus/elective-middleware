@@ -19,7 +19,7 @@ export class MenuService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async create(createMenuDto: CreateMenuDto): Promise<any> {
+  async create(createMenuDto: CreateMenuDto) {
     const response = await lastValueFrom(
       this.httpService.post<AxiosResponse<MenuEntity>>(
         this.baseUrl,
@@ -29,7 +29,7 @@ export class MenuService {
     return response.data;
   }
 
-  async getById(id_menu: string): Promise<any> {
+  async getById(id_menu: string) {
     const response = await lastValueFrom(
       this.httpService.get<AxiosResponse<MenuEntity>>(
         `${this.baseUrl}/${id_menu}`,
@@ -38,7 +38,7 @@ export class MenuService {
     return response.data;
   }
 
-  async findMany(id_restaurant?: string): Promise<any> {
+  async findMany(id_restaurant?: string) {
     const params: any = {};
     if (id_restaurant) params.id_restaurant = id_restaurant;
 
@@ -53,7 +53,7 @@ export class MenuService {
     return response.data;
   }
 
-  async update(id_menu: string, updateMenuDto: UpdateMenuDto): Promise<any> {
+  async update(id_menu: string, updateMenuDto: UpdateMenuDto) {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<MenuEntity>>(
         `${this.baseUrl}/${id_menu}`,
@@ -63,7 +63,7 @@ export class MenuService {
     return response.data;
   }
 
-  async remove(id_menu: string): Promise<any> {
+  async remove(id_menu: string) {
     const response = await lastValueFrom(
       this.httpService.delete<AxiosResponse<MenuEntity>>(
         `${this.baseUrl}/${id_menu}`,
@@ -82,9 +82,7 @@ export class MenuService {
     return response.data;
   }
 
-  async updateCategory(
-    updateProductCategoryDto: UpdateProductCategoryDto,
-  ): Promise<any> {
+  async updateCategory(updateProductCategoryDto: UpdateProductCategoryDto) {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<CategoryEntity>>(
         `${this.baseUrl}/productCategory`,
@@ -94,7 +92,7 @@ export class MenuService {
     return response.data;
   }
 
-  async removeCategory(id_category: string): Promise<any> {
+  async removeCategory(id_category: string) {
     const response = await lastValueFrom(
       this.httpService.delete<AxiosResponse<MenuEntity>>(
         `${this.baseUrl}/category/${id_category}`,

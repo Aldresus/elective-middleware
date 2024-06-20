@@ -198,11 +198,16 @@ export class MenuController {
       role === Role.DEV ||
       role === Role.DELIVERYMAN
     ) {
-      const data = await this.menuService.findMany(idRestaurant);
+      const response = await this.menuService.findMany(idRestaurant);
 
-      console.log(data);
+      console.log(response);
 
-      const { createdAt, updatedAt, ...rest } = data;
+      // const { createdAt, updatedAt, ...rest } = data;
+      const rest = response.data.map((item) => {
+        const { createdAt, updatedAt, ...rest } = item as MenuEntity;
+        return rest;
+      });
+
       console.log(rest);
 
       return rest;
