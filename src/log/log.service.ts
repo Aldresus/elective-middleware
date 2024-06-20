@@ -34,6 +34,15 @@ export class LogService {
     return response.data;
   }
 
+  async count(query: { service: string }) {
+    const response = await lastValueFrom(
+      this.httpService.get<LogEntity[]>(`${this.baseUrl}/count`, {
+        params: query,
+      }),
+    );
+    return response.data;
+  }
+
   async update(id: string, updateLogDto: UpdateLogDto): Promise<LogEntity> {
     const response = await lastValueFrom(
       this.httpService.patch<LogEntity>(`${this.baseUrl}/${id}`, updateLogDto),

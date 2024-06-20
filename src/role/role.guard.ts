@@ -56,7 +56,7 @@ export class RolesGuard implements CanActivate {
 
     if (!authorizationHeader) {
       // If no authorization header, deny access
-      return false;
+      throw new ForbiddenException(msg.missing_token);
     }
 
     const token = authorizationHeader.replace('Bearer ', '');
@@ -77,7 +77,7 @@ export class RolesGuard implements CanActivate {
 
       if (!hasRequiredRole) {
         console.log('User does not have the required role');
-        return false;
+        throw new ForbiddenException(msg.missing_required_role);
       }
 
       // Attach roles to the request for later use
