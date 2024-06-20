@@ -262,7 +262,7 @@ export class MenuController {
       return this.menuService.update(id_menu, updateMenuDto);
     }
     if (role === Role.RESTAURATEUR) {
-      const { data } = await this.menuService.getById(id_menu);
+      const data = (await this.menuService.getById(id_menu)).data;
       console.log(data);
 
       const restaurateur = (
