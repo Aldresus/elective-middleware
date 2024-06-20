@@ -262,7 +262,7 @@ export class MenuController {
       return this.menuService.update(id_menu, updateMenuDto);
     }
     if (role === Role.RESTAURATEUR) {
-      const data = (await this.menuService.getById(id_menu)).data;
+      const data = await this.menuService.getById(id_menu);
       console.log(data);
 
       const restaurateur = (
@@ -274,9 +274,9 @@ export class MenuController {
       console.log('DATA PATCH: ', data);
       console.log('RESTAURATEUR: ', restaurateur);
 
-      if (restaurateur.id_restaurant === data.id_restaurant) {
-        return this.menuService.update(id_menu, updateMenuDto);
-      }
+      // if (restaurateur.id_restaurant === data.id_restaurant) {
+      //   return this.menuService.update(id_menu, updateMenuDto);
+      // }
     }
     throw new ForbiddenException(msg.missing_perms);
   }
