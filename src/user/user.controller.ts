@@ -187,7 +187,7 @@ export class UserController {
 
         if (
           filteredUpdateUserDto.role ||
-          filteredUpdateUserDto.role === Role.CLIENT
+          filteredUpdateUserDto.role !== Role.CLIENT
         ) {
           if (
             filteredUpdateUserDto.role !== Role.RESTAURATEUR &&
