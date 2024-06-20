@@ -78,8 +78,10 @@ export class RestaurantController {
         throw new ForbiddenException(msg.restaurant_already_created);
       }
 
-      const newRestaurant =
-        await this.restaurantService.create(createRestaurantDto);
+      const newRestaurant = await this.restaurantService.create(
+        createRestaurantDto,
+        user.sub,
+      );
 
       // update user with restaurant ID
       await this.utils.setUserRestaurantID(user.sub, {
