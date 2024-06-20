@@ -6,7 +6,10 @@ import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { MenuEntity } from './entities/menu.entity'; // Assurez-vous d'avoir cette entité
 import { config } from 'config';
-import { UpdateCategoryDto, UpdateProductCategoryDto } from './dto/update-category';
+import {
+  UpdateCategoryDto,
+  UpdateProductCategoryDto,
+} from './dto/update-category';
 import { CategoryEntity } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category';
 
@@ -44,6 +47,9 @@ export class MenuService {
         params,
       }),
     );
+
+    console.log(response.data);
+
     return response.data;
   }
 
@@ -66,7 +72,7 @@ export class MenuService {
     return response.data;
   }
 
-  async createCategory(createCategoryDto: CreateCategoryDto){
+  async createCategory(createCategoryDto: CreateCategoryDto) {
     const response = await lastValueFrom(
       this.httpService.post<AxiosResponse<CategoryEntity>>(
         `${this.baseUrl}/category`,
@@ -76,7 +82,9 @@ export class MenuService {
     return response.data;
   }
 
-  async updateCategory(updateProductCategoryDto: UpdateProductCategoryDto): Promise<any> {
+  async updateCategory(
+    updateProductCategoryDto: UpdateProductCategoryDto,
+  ): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<CategoryEntity>>(
         `${this.baseUrl}/productCategory`,
