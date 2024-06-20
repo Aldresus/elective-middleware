@@ -204,6 +204,8 @@ export class MenuController {
 
       // const { createdAt, updatedAt, ...rest } = data;
       const rest = data.map((item) => {
+        console.log('items ', item);
+
         const { createdAt, updatedAt, ...tempRest } = item;
         return tempRest;
       });
