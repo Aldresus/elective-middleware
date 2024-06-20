@@ -43,6 +43,16 @@ export class RestaurantController {
     private readonly utils: Utils,
   ) {}
 
+  @Post('restaurantCategory')
+  @ApiOperation({ summary: 'Create a restaurant category' })
+  @ApiCreatedResponse({ type: RestaurantCategoryEntity })
+  @ApiBody({ type: CreateRestaurantCategoryDto })
+  createCategory(
+    @Body() createRestaurantCategoryDto: CreateRestaurantCategoryDto,
+  ) {
+    return this.restaurantService.createCategory(createRestaurantCategoryDto);
+  }
+
   @Post()
   @Roles(Role.ADMIN, Role.RESTAURATEUR, Role.COMMERCIAL, Role.TECHNICIAN)
   @ApiOperation({ summary: 'Create a restaurant' })
@@ -90,16 +100,6 @@ export class RestaurantController {
 
       return newRestaurant;
     }
-  }
-
-  @Post('restaurantCategory')
-  @ApiOperation({ summary: 'Create a restaurant category' })
-  @ApiCreatedResponse({ type: RestaurantCategoryEntity })
-  @ApiBody({ type: CreateRestaurantCategoryDto })
-  createCategory(
-    @Body() createRestaurantCategoryDto: CreateRestaurantCategoryDto,
-  ) {
-    return this.restaurantService.createCategory(createRestaurantCategoryDto);
   }
 
   @Get()
