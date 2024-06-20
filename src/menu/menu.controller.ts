@@ -200,7 +200,10 @@ export class MenuController {
     ) {
       const data = await this.menuService.findMany(idRestaurant);
 
+      console.log(data);
+
       const { createdAt, updatedAt, ...rest } = data;
+      console.log(rest);
 
       return rest;
     }
