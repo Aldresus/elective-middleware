@@ -64,7 +64,7 @@ export class RestaurantController {
       role === Role.TECHNICIAN ||
       role === Role.COMMERCIAL
     ) {
-      return this.restaurantService.create(createRestaurantDto);
+      return this.restaurantService.create(createRestaurantDto, user.sub);
     }
 
     if (role === Role.RESTAURATEUR) {

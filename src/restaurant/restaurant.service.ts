@@ -18,10 +18,13 @@ export class RestaurantService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  async create(createRestaurantDto: CreateRestaurantDto): Promise<any> {
+  async create(
+    createRestaurantDto: CreateRestaurantDto,
+    id_user: string,
+  ): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.post<AxiosResponse<RestaurantEntity>>(
-        this.baseUrl,
+        `this.baseUrl/${id_user}`,
         createRestaurantDto,
       ),
     );
