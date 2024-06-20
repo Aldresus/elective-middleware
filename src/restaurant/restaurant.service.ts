@@ -22,6 +22,7 @@ export class RestaurantService {
     createRestaurantDto: CreateRestaurantDto,
     id_user: string,
   ): Promise<any> {
+    console.log(`this.baseUrl/${id_user}`);
     const response = await lastValueFrom(
       this.httpService.post<AxiosResponse<RestaurantEntity>>(
         `this.baseUrl/${id_user}`,
