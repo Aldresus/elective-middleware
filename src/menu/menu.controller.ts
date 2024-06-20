@@ -263,6 +263,8 @@ export class MenuController {
     }
     if (role === Role.RESTAURATEUR) {
       const { data } = await this.menuService.getById(id_menu);
+      console.log(data);
+
       const restaurateur = (
         await this.utils.getUserByID({
           id: user.sub,
