@@ -50,6 +50,7 @@ export class RestaurantController {
   createCategory(
     @Body() createRestaurantCategoryDto: CreateRestaurantCategoryDto,
   ) {
+    console.log('createCategory');
     return this.restaurantService.createCategory(createRestaurantCategoryDto);
   }
 
@@ -60,6 +61,7 @@ export class RestaurantController {
   @ApiBody({ type: CreateRestaurantDto })
   @ApiBearerAuth('access-token')
   async create(@Body() createRestaurantDto, @Request() req) {
+    console.log('createRestaurantDto');
     const user = req.user;
     const role = req.role;
 
