@@ -198,11 +198,7 @@ export class MenuController {
       role === Role.DEV ||
       role === Role.DELIVERYMAN
     ) {
-      const data = await this.menuService.findMany(idRestaurant);
-
-      const { createdAt, updatedAt, ...rest } = data;
-
-      return rest;
+      return this.menuService.findMany(idRestaurant);
     }
     throw new ForbiddenException(msg.missing_perms);
   }
@@ -266,7 +262,7 @@ export class MenuController {
       return this.menuService.update(id_menu, updateMenuDto);
     }
     if (role === Role.RESTAURATEUR) {
-      const data = await this.menuService.getById(id_menu);
+      const { data } = await this.menuService.getById(id_menu);
       const restaurateur = (
         await this.utils.getUserByID({
           id: user.sub,
@@ -307,7 +303,7 @@ export class MenuController {
       return this.menuService.remove(id_menu);
     }
     if (role === Role.RESTAURATEUR) {
-      const data = await this.menuService.getById(id_menu);
+      const { data } = await this.menuService.getById(id_menu);
       const restaurateur = (
         await this.utils.getUserByID({
           id: user.sub,

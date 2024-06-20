@@ -7,7 +7,10 @@ import { HttpService } from '@nestjs/axios';
 import { RestaurantEntity } from './entities/restaurant.entity';
 import { config } from 'config';
 import { CreateRestaurantCategoryDto } from './dto/create-category';
-import { AddMenuInCategoryDto, AddProductInCategoryDto } from './dto/update-category';
+import {
+  AddMenuInCategoryDto,
+  AddProductInCategoryDto,
+} from './dto/update-category';
 
 @Injectable()
 export class RestaurantService {
@@ -25,7 +28,9 @@ export class RestaurantService {
     return response.data;
   }
 
-  async createCategory(createRestaurantCategoryDto: CreateRestaurantCategoryDto): Promise<any> {
+  async createCategory(
+    createRestaurantCategoryDto: CreateRestaurantCategoryDto,
+  ): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.post<AxiosResponse<RestaurantEntity>>(
         `${this.baseUrl}/restaurantCategory`,
@@ -61,6 +66,15 @@ export class RestaurantService {
     return response.data;
   }
 
+  async findByUserId(id_user: string): Promise<any> {
+    const response = await lastValueFrom(
+      this.httpService.get<AxiosResponse<RestaurantEntity[]>>(
+        `${this.baseUrl}/user/${id_user}`,
+      ),
+    );
+    return response.data;
+  }
+
   async update(
     id_restaurant: string,
     updateRestaurantDto: UpdateRestaurantDto,
@@ -75,7 +89,7 @@ export class RestaurantService {
   }
 
   async addProductCategory(
-    addProductInCategoryDto: AddProductInCategoryDto
+    addProductInCategoryDto: AddProductInCategoryDto,
   ): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<RestaurantEntity>>(
@@ -87,7 +101,7 @@ export class RestaurantService {
   }
 
   async addMenuCategory(
-    addMenuInCategoryDto: AddMenuInCategoryDto
+    addMenuInCategoryDto: AddMenuInCategoryDto,
   ): Promise<any> {
     const response = await lastValueFrom(
       this.httpService.patch<AxiosResponse<RestaurantEntity>>(
@@ -97,7 +111,6 @@ export class RestaurantService {
     );
     return response.data;
   }
-  
 
   async remove(id_restaurant: string): Promise<any> {
     const response = await lastValueFrom(

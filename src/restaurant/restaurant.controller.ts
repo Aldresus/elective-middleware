@@ -29,7 +29,10 @@ import { msg } from 'config';
 import { Utils } from 'src/utils/utils';
 import { RestaurantCategoryEntity } from './entities/category.entity';
 import { CreateRestaurantCategoryDto } from './dto/create-category';
-import { AddMenuInCategoryDto, AddProductInCategoryDto } from './dto/update-category';
+import {
+  AddMenuInCategoryDto,
+  AddProductInCategoryDto,
+} from './dto/update-category';
 import { CreateLogDto } from 'src/log/dto/create-log.dto';
 
 @Controller('api/restaurant')
@@ -86,12 +89,14 @@ export class RestaurantController {
       return newRestaurant;
     }
   }
-  
+
   @Post('restaurantCategory')
   @ApiOperation({ summary: 'Create a restaurant category' })
   @ApiCreatedResponse({ type: RestaurantCategoryEntity })
   @ApiBody({ type: CreateRestaurantCategoryDto })
-  createCategory(@Body() createRestaurantCategoryDto: CreateRestaurantCategoryDto) {
+  createCategory(
+    @Body() createRestaurantCategoryDto: CreateRestaurantCategoryDto,
+  ) {
     return this.restaurantService.createCategory(createRestaurantCategoryDto);
   }
 
@@ -279,6 +284,14 @@ export class RestaurantController {
     throw new ForbiddenException(msg.missing_perms);*/
   }
 
+  @Get('user/:id')
+  @ApiOperation({ summary: 'Get restaurant with ID' })
+  @ApiCreatedResponse({ type: RestaurantEntity })
+  @ApiParam({ name: 'id', type: String })
+  findByUserId(@Param('id') id_user: string) {
+    return this.restaurantService.findByUserId(id_user);
+  }
+
   @Patch('addProductCategory')
   @ApiOperation({ summary: 'Update menu category with ID' })
   @ApiCreatedResponse({ type: RestaurantCategoryEntity })
@@ -294,7 +307,6 @@ export class RestaurantController {
   addMenuCategory(@Body() addMenuInCategoryDto: AddMenuInCategoryDto) {
     return this.restaurantService.addMenuCategory(addMenuInCategoryDto);
   }
-
 
   @Patch(':id')
   @Roles(Role.ADMIN, Role.RESTAURATEUR, Role.COMMERCIAL, Role.TECHNICIAN)
