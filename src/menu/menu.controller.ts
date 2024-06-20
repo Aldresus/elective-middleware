@@ -198,12 +198,12 @@ export class MenuController {
       role === Role.DEV ||
       role === Role.DELIVERYMAN
     ) {
-      const response = await this.menuService.findMany(idRestaurant);
+      const { data } = await this.menuService.findMany(idRestaurant);
 
-      console.log(response);
+      console.log(data);
 
       // const { createdAt, updatedAt, ...rest } = data;
-      const rest = response.data.map((item) => {
+      const rest = data.map((item) => {
         const { createdAt, updatedAt, ...rest } = item as MenuEntity;
         return rest;
       });
@@ -274,7 +274,7 @@ export class MenuController {
       return this.menuService.update(id_menu, updateMenuDto);
     }
     if (role === Role.RESTAURATEUR) {
-      const data = await this.menuService.getById(id_menu);
+      const { data } = await this.menuService.getById(id_menu);
       const restaurateur = (
         await this.utils.getUserByID({
           id: user.sub,
@@ -315,7 +315,7 @@ export class MenuController {
       return this.menuService.remove(id_menu);
     }
     if (role === Role.RESTAURATEUR) {
-      const data = await this.menuService.getById(id_menu);
+      const { data } = await this.menuService.getById(id_menu);
       const restaurateur = (
         await this.utils.getUserByID({
           id: user.sub,
