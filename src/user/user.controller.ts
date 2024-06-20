@@ -185,11 +185,13 @@ export class UserController {
         const { id_restaurant, id_users, ...filteredUpdateUserDto } =
           updateUserDto;
 
-        if (
-          filteredUpdateUserDto.role !== Role.RESTAURATEUR &&
-          filteredUpdateUserDto.role !== Role.DELIVERYMAN
-        ) {
-          throw new ForbiddenException(msg.missing_perms);
+        if (filteredUpdateUserDto.role) {
+          if (
+            filteredUpdateUserDto.role !== Role.RESTAURATEUR &&
+            filteredUpdateUserDto.role !== Role.DELIVERYMAN
+          ) {
+            throw new ForbiddenException(msg.missing_perms);
+          }
         }
 
         const data = await this.userService.update(user.sub, updateUserDto);
